@@ -1,0 +1,170 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category 	Magestore
+ * @package 	Magestore_Similayerednavigation
+ * @copyright 	Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license 	http://www.magestore.com/license-agreement.html
+ */
+-->
+<config>
+    <modules>
+        <Simi_Similayerednavigation>
+            <version>0.1.0</version>
+        </Simi_Similayerednavigation>
+    </modules>
+    <frontend>
+        <routers>
+            <similayerednavigation>
+                <use>standard</use>
+                <args>
+                    <module>Simi_Similayerednavigation</module>
+                    <frontName>similayerednavigation</frontName>
+                </args>
+            </similayerednavigation>
+        </routers>
+        <layout>
+            <updates>
+                <similayerednavigation>
+                    <file>similayerednavigation.xml</file>
+                </similayerednavigation>
+            </updates>
+        </layout>
+		<translate>
+            <modules>
+                <Simi_Similayerednavigation>
+                    <files>
+                        <default>Simi_Similayerednavigation.csv</default>
+                    </files>
+                </Simi_Similayerednavigation>
+            </modules>
+        </translate>
+    </frontend>
+    <admin>
+        <routers>
+			<similayerednavigationadmin>
+				<use>admin</use>
+				<args>
+					<module>Simi_Similayerednavigation</module>
+					<frontName>similayerednavigationadmin</frontName>
+				</args>
+			</similayerednavigationadmin>
+        </routers>
+    </admin>
+    <adminhtml>
+		<layout>
+			<updates>
+				<similayerednavigation>
+					<file>similayerednavigation.xml</file>
+				</similayerednavigation>
+			</updates>
+		</layout>
+		<translate>
+            <modules>
+                <Simi_Similayerednavigation>
+                    <files>
+                        <default>Simi_Similayerednavigation.csv</default>
+                    </files>
+                </Simi_Similayerednavigation>
+            </modules>
+        </translate>
+    </adminhtml>   
+    <global>
+        <models>
+            <similayerednavigation>
+                <class>Simi_Similayerednavigation_Model</class>
+                <resourceModel>similayerednavigation_mysql4</resourceModel>
+            </similayerednavigation>
+            <similayerednavigation_mysql4>
+                <class>Simi_Similayerednavigation_Model_Mysql4</class>
+                <entities>
+                    <similayerednavigation>
+                        <table>similayerednavigation</table>
+                    </similayerednavigation>
+                </entities>
+            </similayerednavigation_mysql4>
+        </models>
+        <resources>
+            <similayerednavigation_setup>
+                <setup>
+                    <module>Simi_Similayerednavigation</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </similayerednavigation_setup>
+            <similayerednavigation_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </similayerednavigation_write>
+            <similayerednavigation_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </similayerednavigation_read>
+        </resources>
+        <blocks>
+            <similayerednavigation>
+                <class>Simi_Similayerednavigation_Block</class>
+            </similayerednavigation>
+        </blocks>
+        <helpers>
+            <similayerednavigation>
+                <class>Simi_Similayerednavigation_Helper</class>
+            </similayerednavigation>
+        </helpers>
+         <events> 
+            <connector_catalog_get_category_products_return>                    
+                <observers>   
+                    <similayerednavigation_observers>
+                        <type>singleton</type>
+                        <class>similayerednavigation/observer</class>
+                        <method>connectorCatalogGetCategoryProductsReturn</method>
+                    </similayerednavigation_observers>  
+                </observers>
+            </connector_catalog_get_category_products_return>                        
+            <connector_catalog_get_all_products_return>                    
+                <observers>   
+                    <similayerednavigation_get_all_products>
+                        <type>singleton</type>
+                        <class>similayerednavigation/observer</class>
+                        <method>connectorCatalogGetAllProductsReturn</method>
+                    </similayerednavigation_get_all_products>  
+                </observers>
+            </connector_catalog_get_all_products_return> 
+            <connector_catalog_search_products_return>                    
+                <observers>   
+                    <similayerednavigation_get_all_products>
+                        <type>singleton</type>
+                        <class>similayerednavigation/observer</class>
+                        <method>connectorCatalogSearchProductsReturn</method>
+                    </similayerednavigation_get_all_products>  
+                </observers>
+            </connector_catalog_search_products_return>             
+        </events>
+		<!-- <events>
+			<controller_action_predispatch>
+				<observers>
+					<similayerednavigation_observers>
+						<class>similayerednavigation/observer</class>
+						<method>controllerActionPredispatch</method>
+					</similayerednavigation_observers>
+				</observers>
+			</controller_action_predispatch>
+		</events> -->
+    </global>
+</config>

@@ -1,0 +1,473 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category 	Magestore
+ * @package 	Magestore_Siminotification
+ * @copyright 	Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license 	http://www.magestore.com/license-agreement.html
+ */
+-->
+<config>
+    <tabs>
+        <simi translate="label">
+            <label>Simi Extension</label>
+            <sort_order>600</sort_order>
+        </simi>
+    </tabs>
+    <sections>
+        <connector translate="label" module="connector">
+            <class>separator-top</class>
+            <label>SimiCart</label>
+            <tab>simi</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>299</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+				<notification translate="label">
+					<label>Notification Configuration</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>10</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>	
+						<noti_price_separator translate="label">
+							<label>Send Notification when Price Updated</label>
+							<sort_order>0</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<frontend_model>siminotification/adminhtml_system_config_form_field_separator</frontend_model>
+							<comment></comment>
+						</noti_price_separator>	
+						<noti_price_enable translate="label">
+							<label>Send notification to all users when price of product is changed</label>
+							<frontend_type>select</frontend_type>
+							<sort_order>1</sort_order>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</noti_price_enable>
+						<!-- <noti_price_website translate="label">
+							<label>Website</label>
+							<frontend_type>select</frontend_type>
+							<sort_order>5</sort_order>
+							<source_model>siminotification/website</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+							<depends><noti_price_enable>1</noti_price_enable></depends>
+							<comment></comment>
+						</noti_price_website> -->
+						<noti_price_showpopup translate="label">
+							<label>Show Popup</label>
+							<frontend_type>select</frontend_type>
+							<sort_order>5</sort_order>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends><noti_price_enable>1</noti_price_enable></depends>
+							<comment></comment>
+						</noti_price_showpopup>
+						<noti_price_title translate="label">
+							<label>Title</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>10</sort_order>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends><noti_price_enable>1</noti_price_enable></depends>
+							<comment></comment>
+						</noti_price_title>
+						<noti_price_message translate="label">
+							<label>Message</label>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>20</sort_order>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends><noti_price_enable>1</noti_price_enable></depends>
+							<comment><![CDATA[Characters recommended: < 250]]></comment>
+						</noti_price_message>
+						<noti_price_type translate="label">
+							<label>Direct Viewers to</label>
+							<frontend_type>select</frontend_type>
+							<sort_order>30</sort_order>
+							<source_model>siminotification/siminotification</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends><noti_price_enable>1</noti_price_enable></depends>
+							<comment></comment>
+						</noti_price_type>
+						<!-- <noti_price_product_id translate="label">
+							<label>Product ID</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>32</sort_order>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends>
+								<noti_price_enable>1</noti_price_enable>
+								<noti_price_type>1</noti_price_type>
+							</depends>
+							<comment></comment>
+						</noti_price_product_id> -->
+						<noti_price_category_id translate="label">
+							<label>Category ID</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>34</sort_order>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends>
+								<noti_price_enable>1</noti_price_enable>
+								<noti_price_type>2</noti_price_type>
+							</depends>
+							<comment></comment>
+						</noti_price_category_id>
+						<noti_price_url translate="label">
+							<label>URL</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>36</sort_order>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends>
+								<noti_price_enable>1</noti_price_enable>
+								<noti_price_type>3</noti_price_type>
+							</depends>
+							<comment>Ex: https://simicart.com</comment>
+						</noti_price_url>
+						<noti_price_platform translate="label">
+							<label>Device</label>
+							<frontend_type>select</frontend_type>
+							<sort_order>40</sort_order>
+							<source_model>siminotification/platform</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends><noti_price_enable>1</noti_price_enable></depends>
+							<comment></comment> 
+						</noti_price_platform>
+						<!-- <noti_price_sandbox translate="label">
+							<label>Sandbox Mode</label>
+							<frontend_type>select</frontend_type>
+							<sort_order>50</sort_order>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends>
+								<noti_price_enable>1</noti_price_enable>
+								<noti_price_platform>1</noti_price_platform>
+							</depends>
+							<comment></comment>
+						</noti_price_sandbox> --> 
+						<new_product_separator translate="label">
+							<label>Send Notification when there's a new product</label>
+							<sort_order>60</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<frontend_model>siminotification/adminhtml_system_config_form_field_separator</frontend_model>
+							<comment></comment>
+						</new_product_separator>	
+						<new_product_enable translate="label">
+							<label>Send notification to all users when there's a new product</label>
+							<frontend_type>select</frontend_type>
+							<sort_order>70</sort_order>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</new_product_enable>
+						<!-- <new_product_website translate="label">
+							<label>Website</label>
+							<frontend_type>select</frontend_type>
+							<sort_order>75</sort_order>
+							<source_model>siminotification/website</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+							<depends><new_product_enable>1</new_product_enable></depends>
+							<comment></comment>
+						</noti_price_website> -->
+						<new_product_showpopup translate="label">
+							<label>Show Popup</label>
+							<frontend_type>select</frontend_type>
+							<sort_order>75</sort_order>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends><noti_price_enable>1</noti_price_enable></depends>
+							<comment></comment>
+						</new_product_showpopup>
+						<new_product_title translate="label">
+							<label>Title</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>80</sort_order>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends><new_product_enable>1</new_product_enable></depends>
+							<comment></comment>
+						</new_product_title>
+						<new_product_message translate="label">
+							<label>Message</label>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>90</sort_order>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends><new_product_enable>1</new_product_enable></depends>
+							<comment><![CDATA[Characters recommended: < 250]]></comment>
+						</new_product_message>
+						<new_product_type translate="label">
+							<label>Direct Viewers to</label>
+							<frontend_type>select</frontend_type>
+							<sort_order>100</sort_order>
+							<source_model>siminotification/siminotification</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends><new_product_enable>1</new_product_enable></depends>
+							<comment></comment>
+						</new_product_type>
+						<!-- <new_product_id translate="label">
+							<label>Product ID</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>102</sort_order>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends>
+								<new_product_enable>1</new_product_enable>
+								<new_product_type>1</new_product_type>
+							</depends>
+							<comment></comment>
+						</new_product_id> -->
+						<new_product_category_id translate="label">
+							<label>Category ID</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>104</sort_order>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends>
+								<new_product_enable>1</new_product_enable>
+								<new_product_type>2</new_product_type>
+							</depends>
+							<comment></comment>
+						</new_product_category_id>
+						<new_product_url translate="label">
+							<label>URL</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>106</sort_order>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends>
+								<new_product_enable>1</new_product_enable>
+								<new_product_type>3</new_product_type>
+							</depends>
+							<comment>Ex: https://simicart.com</comment>
+						</new_product_url>
+						<new_product_platform translate="label">
+							<label>Device</label>
+							<frontend_type>select</frontend_type>
+							<sort_order>110</sort_order>
+							<source_model>siminotification/platform</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends><new_product_enable>1</new_product_enable></depends>
+							<comment></comment>
+						</new_product_platform>
+						<!-- <new_product_sandbox translate="label">
+							<label>Sandbox Mode</label>
+							<frontend_type>select</frontend_type>
+							<sort_order>120</sort_order>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends>
+								<new_product_enable>1</new_product_enable>
+								<new_product_platform>1</new_product_platform>
+							</depends>
+							<comment></comment>
+						</new_product_sandbox> -->
+						<noti_purchase_separator translate="label">
+							<label>Send Notification after customer purchase</label>
+							<sort_order>130</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<frontend_model>siminotification/adminhtml_system_config_form_field_separator</frontend_model>
+							<comment></comment>
+						</noti_purchase_separator>
+						<noti_purchase_enable translate="label">
+							<label>Send notification to a customer when he/she finish purchasing</label>
+							<frontend_type>select</frontend_type>
+							<sort_order>140</sort_order>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</noti_purchase_enable>
+						<!-- <noti_purchase_customer_group translate="label">
+							<label>Customer Groups</label>
+							<frontend_type>multiselect</frontend_type>
+							<sort_order>145</sort_order>
+							<source_model>siminotification/siminotification</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends><noti_purchase_enable>1</noti_purchase_enable></depends>
+							<comment></comment>
+						</noti_purchase_customer_group> -->
+						<noti_purchase_title translate="label">
+							<label>Title</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>150</sort_order>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends><noti_purchase_enable>1</noti_purchase_enable></depends>
+							<comment></comment>
+						</noti_purchase_title>
+						<noti_purchase_message translate="label">
+							<label>Message</label>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>160</sort_order>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends><noti_purchase_enable>1</noti_purchase_enable></depends>
+							<comment><![CDATA[Characters recommended: < 250]]></comment>
+						</noti_purchase_message> 
+						<noti_purchase_type translate="label">
+							<label>Direct Viewers to</label>
+							<frontend_type>select</frontend_type>
+							<sort_order>170</sort_order>
+							<source_model>siminotification/siminotification</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends><noti_purchase_enable>1</noti_purchase_enable></depends>
+							<comment></comment>
+						</noti_purchase_type>
+						<noti_purchase_product_id translate="label">
+							<label>Product ID</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>172</sort_order>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends>
+								<noti_purchase_enable>1</noti_purchase_enable>
+								<noti_purchase_type>1</noti_purchase_type>
+							</depends>
+							<comment></comment>
+						</noti_purchase_product_id>
+						<noti_purchase_category_id translate="label">
+							<label>Category ID</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>174</sort_order>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends>
+								<noti_purchase_enable>1</noti_purchase_enable>
+								<noti_purchase_type>2</noti_purchase_type>
+							</depends>
+							<comment></comment>
+						</noti_purchase_category_id>
+						<noti_purchase_url translate="label">
+							<label>URL</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>176</sort_order>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends>
+								<noti_purchase_enable>1</noti_purchase_enable>
+								<noti_purchase_type>3</noti_purchase_type>
+							</depends>
+							<comment>Ex: https://simicart.com</comment>
+						</noti_purchase_url>
+						<!-- <google_configuration_separator translate="label comment">
+                            <label>Google</label>
+                            <frontend_type>label</frontend_type>
+                            <frontend_model>siminotification/adminhtml_system_config_form_field_separator</frontend_model>
+                            <margin_top>10px</margin_top>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </google_configuration_separator>
+                        <gkey translate="label">
+                            <label>Google Map API key</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>61</sort_order>							
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>
+                                <model>siminotification/adminhtml_googlecomment</model>
+                            </comment>                            
+                        </gkey>
+                        <distance_unit translate="label">
+                            <label>Distance Unit</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>70</sort_order>
+                            <source_model>siminotification/system_config_distance</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Unit to measure radius</comment>
+                        </distance_unit>  -->						
+					</fields>				
+				</notification>
+			</groups>
+		</connector>
+	</sections>
+</config>
