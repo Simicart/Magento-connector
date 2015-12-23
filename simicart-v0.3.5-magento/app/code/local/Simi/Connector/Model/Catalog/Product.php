@@ -524,9 +524,16 @@ class Simi_Connector_Model_Catalog_Product extends Simi_Connector_Model_Catalog 
             }else{
                 $category = $this->getCategoryByLink($link);
                 if($category->getId()){
+                    $categoryChildrenCount = $category->getChildrenCount();
+                    if($categoryChildrenCount > 0){
+                        $hasChild = 1;
+                    }else{
+                        $hasChild = 0;
+                    }                        
                     $information = $this->statusSuccess();
                     $categoryInfo['id'] = $category->getId();
                     $categoryInfo['type'] = 2;
+                    $categoryInfo['has_child'] = $hasChild;
                     $information['data'] = $categoryInfo;
                 }
             }

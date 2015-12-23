@@ -45,7 +45,8 @@ class Simi_Connector_Model_Checkout_Payment extends Simi_Connector_Model_Checkou
         $this->_listPayment[] = 'zooz';
 		$this->_listPayment[] = 'transfer_mobile';
 		$this->_listPayment[] = 'cashondelivery';
-		$this->_listPayment[] = 'checkmo';		
+        $this->_listPayment[] = 'checkmo';      
+		$this->_listPayment[] = 'free';		
     }
 
     protected function _getListPayment() {
@@ -63,7 +64,8 @@ class Simi_Connector_Model_Checkout_Payment extends Simi_Connector_Model_Checkou
             'zooz' => 2,
             'transfer_mobile' => 0,
             'cashondelivery' => 0,
-            'checkmo' => 0,			
+            'checkmo' => 0,         
+            'free' => 0,			
         );
     }
 
