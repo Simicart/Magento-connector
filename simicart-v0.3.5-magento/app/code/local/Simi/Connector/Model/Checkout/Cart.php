@@ -214,7 +214,7 @@ class Simi_Connector_Model_Checkout_Cart extends Simi_Connector_Model_Abstract {
             }
             return $information;
         }
-        $redirect = Mage::getUrl('connector/customer/get_cart/');
+        $redirect = Mage::getUrl('connector/customer/get_cart/', array('_secure'=>true));
         Header('Location: ' . $redirect);
         exit();
         // this->_getCheckoutSession()->setCartWasUpdated(true);
