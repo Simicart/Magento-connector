@@ -1,0 +1,152 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category    Magestore
+ * @package     Magestore_Appreport
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+-->
+<config>
+    <modules>
+        <Simi_Appreport>
+            <version>0.1.0</version>
+        </Simi_Appreport>
+    </modules>
+    <frontend>
+        <routers>
+            <appreport>
+                <use>standard</use>
+                <args>
+                    <module>Simi_Appreport</module>
+                    <frontName>appreport</frontName>
+                </args>
+            </appreport>
+        </routers>
+        <layout>
+            <updates>
+                <appreport>
+                    <file>appreport.xml</file>
+                </appreport>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <Simi_Appreport>
+                    <files>
+                        <default>Simi_Appreport.csv</default>
+                    </files>
+                </Simi_Appreport>
+            </modules>
+        </translate>
+    </frontend>
+    <admin>
+        <routers>
+            <appreportadmin>
+                <use>admin</use>
+                <args>
+                    <module>Simi_Appreport</module>
+                    <frontName>appreportadmin</frontName>
+                </args>
+            </appreportadmin>
+        </routers>
+    </admin>
+    <adminhtml>
+        <layout>
+            <updates>
+                <appreport>
+                    <file>appreport.xml</file>
+                </appreport>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <Simi_Appreport>
+                    <files>
+                        <default>Simi_Appreport.csv</default>
+                    </files>
+                </Simi_Appreport>
+            </modules>
+        </translate>
+    </adminhtml>   
+    <global>
+        <models>
+            <appreport>
+                <class>Simi_Appreport_Model</class>
+                <resourceModel>appreport_mysql4</resourceModel>
+            </appreport>
+            <appreport_mysql4>
+                <class>Simi_Appreport_Model_Mysql4</class>
+                <entities>
+                    <appreport>
+                        <table>appreport_transactions</table>
+                    </appreport>
+                </entities>
+            </appreport_mysql4>
+        </models>
+        <resources>
+            <appreport_setup>
+                <setup>
+                    <module>Simi_Appreport</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </appreport_setup>
+            <appreport_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </appreport_write>
+            <appreport_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </appreport_read>
+        </resources>
+        <blocks>
+            <appreport>
+                <class>Simi_Appreport_Block</class>
+            </appreport>
+        </blocks>
+        <helpers>
+            <appreport>
+                <class>Simi_Appreport_Helper</class>
+            </appreport>
+        </helpers>
+        <events> 
+            <checkout_onepage_controller_success_action>                    
+                <observers>   
+                    <appreport_observers>
+                        <type>singleton</type>
+                        <class>appreport/observer</class>
+                        <method>simiAppOrderPlacingCompleted</method>
+                    </appreport_observers>  
+                </observers>
+            </checkout_onepage_controller_success_action>
+        </events>
+        <!-- <events>
+            <controller_action_predispatch>
+                <observers>
+                    <appreport_observers>
+                        <class>appreport/observer</class>
+                        <method>controllerActionPredispatch</method>
+                    </appreport_observers>
+                </observers>
+            </controller_action_predispatch>
+        </events> -->
+    </global>
+</config>

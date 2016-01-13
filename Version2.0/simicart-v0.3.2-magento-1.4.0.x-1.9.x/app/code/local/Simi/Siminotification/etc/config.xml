@@ -1,0 +1,173 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category 	Magestore
+ * @package 	Magestore_Siminotification
+ * @copyright 	Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license 	http://www.magestore.com/license-agreement.html
+ */
+-->
+<config>
+    <modules>
+        <Simi_Siminotification>
+            <version>0.1.0</version>
+        </Simi_Siminotification>
+    </modules>
+    <frontend>
+        <routers>
+            <siminotification>
+                <use>standard</use>
+                <args>
+                    <module>Simi_Siminotification</module>
+                    <frontName>siminotification</frontName>
+                </args>
+            </siminotification>
+        </routers>
+        <layout>
+            <updates>
+                <siminotification>
+                    <file>siminotification.xml</file>
+                </siminotification>
+            </updates>
+        </layout>
+		<translate>
+            <modules>
+                <Simi_Siminotification>
+                    <files>
+                        <default>Simi_Siminotification.csv</default>
+                    </files>
+                </Simi_Siminotification>
+            </modules>
+        </translate>
+    </frontend>
+    <admin>
+        <routers>
+			<siminotificationadmin>
+				<use>admin</use>
+				<args>
+					<module>Simi_Siminotification</module>
+					<frontName>siminotificationadmin</frontName>
+				</args>
+			</siminotificationadmin>
+        </routers>
+    </admin>
+    <adminhtml>
+		<layout>
+			<updates>
+				<siminotification>
+					<file>siminotification.xml</file>
+				</siminotification>
+			</updates>
+		</layout>
+		<translate>
+            <modules>
+                <Simi_Siminotification>
+                    <files>
+                        <default>Simi_Siminotification.csv</default>
+                    </files>
+                </Simi_Siminotification>
+            </modules>
+        </translate>
+        <events>
+            <catalog_product_save_before>
+                <observers>
+                    <siminotification_product_save_before>
+                        <class>siminotification/observer</class>
+                        <method>sendNotificationProductChangePrice</method>
+                    </siminotification_product_save_before>
+                </observers>
+            </catalog_product_save_before>
+            <catalog_product_save_after>
+                <observers>
+                    <siminotification_product_save_after>
+                        <class>siminotification/observer</class>
+                        <method>sendNotificationNewProduct</method>
+                    </siminotification_product_save_after>
+                </observers>
+            </catalog_product_save_after>
+        </events>
+    </adminhtml>   
+    <global>
+        <models>
+            <siminotification>
+                <class>Simi_Siminotification_Model</class>
+                <resourceModel>siminotification_mysql4</resourceModel>
+            </siminotification>
+            <siminotification_mysql4>
+                <class>Simi_Siminotification_Model_Mysql4</class>
+                <entities>
+                    <history>
+                        <table>connector_notice_history</table>
+                    </history>
+                </entities>
+            </siminotification_mysql4>
+        </models>
+        <resources>
+            <siminotification_setup>
+                <setup>
+                    <module>Simi_Siminotification</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </siminotification_setup>
+            <siminotification_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </siminotification_write>
+            <siminotification_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </siminotification_read>
+        </resources>
+        <blocks>
+            <siminotification>
+                <class>Simi_Siminotification_Block</class>
+            </siminotification>
+        </blocks>
+        <helpers>
+            <siminotification>
+                <class>Simi_Siminotification_Helper</class>
+            </siminotification>
+        </helpers>
+		<events>
+			<simicart_after_place_order>
+                <observers>
+                    <siminotification_simicart_after_place_order_notification>
+                        <class>siminotification/observer</class>
+                        <method>addNotificationPurchaseOrder</method>
+                    </siminotification_simicart_after_place_order_notification>
+                </observers>
+            </simicart_after_place_order>
+		</events>
+    </global>
+    <default>                
+        <connector>
+            <notification>                                                      
+                <new_product_showpopup>1</new_product_showpopup> 
+                <noti_price_showpopup>1</noti_price_showpopup>  
+                <noti_price_title><![CDATA[New price!]]></noti_price_title>
+                <noti_price_message><![CDATA[The %s has just increased/ discreased from %s to %s. Purchase quick now!]]></noti_price_message>
+                <new_product_title><![CDATA[New product!]]></new_product_title>
+                <new_product_message><![CDATA[The %s has just added. Purchase quick now!]]></new_product_message>
+                <noti_purchase_title><![CDATA[Thank you for your purchase!]]></noti_purchase_title>
+                <noti_purchase_message><![CDATA[Thank you for your purchase at %s. We hope that you will enjoy our product!]]></noti_purchase_message>
+            </notification>           
+        </connector>           
+    </default>
+</config>

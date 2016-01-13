@@ -1,0 +1,145 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category 	Magestore
+ * @package 	Magestore_Connector
+ * @copyright 	Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license 	http://www.magestore.com/license-agreement.html
+ */
+-->
+<config>
+    <menu>
+        <connector module="connector" translate="title">
+            <title>SimiCart</title>
+            <sort_order>71</sort_order>               
+            <children>
+				<core module="connector" translate="title">
+                    <title>Connector Settings</title>      
+					<sort_order>0</sort_order>
+					<children>
+							<connector_app module="connector" translate="title">
+								<title>Apps</title>
+								<sort_order>0</sort_order>
+								<action>connectoradmin/adminhtml_connector</action>
+							</connector_app>
+							<banner module="connector" translate="title">
+								<title>Banners</title>
+								<sort_order>10</sort_order>
+								<action>connectoradmin/adminhtml_banner</action>
+							</banner>
+							<notice module="connector" translate="title">
+								<title>Notifications</title>
+								<sort_order>100</sort_order>
+								<action>connectoradmin/adminhtml_notice</action>
+							</notice>
+							<cms module="connector" translate="title">
+								<title>CMS</title>
+								<sort_order>150</sort_order>
+								<action>connectoradmin/adminhtml_cms</action>
+							</cms>
+							<promoteapp module="connector" translate="title">				
+								<title>Promote Apps</title>
+								<sort_order>170</sort_order>
+								<action>adminhtml/system_config/edit/section/popup</action>
+							</promoteapp>
+							<spotproduct module="connector" translate="title">				
+								<title>Spot Products</title>
+								<sort_order>160</sort_order>
+								<action>adminhtml/system_config/edit/section/spotproduct</action>
+							</spotproduct>
+							<trasfersimi module="connector" translate="title">
+								<title>Payment</title>
+								<sort_order>180</sort_order>
+								<action>adminhtml/system_config/edit/section/payment</action>
+							</trasfersimi>	
+							<settings module="connector" translate="title">
+								<title>General Settings</title>
+								<sort_order>1000</sort_order>
+								<action>adminhtml/system_config/edit/section/connector</action>
+							</settings>
+					</children>
+                </core>  						
+            </children>
+        </connector>
+    </menu>
+    <acl>
+        <resources>
+            <all>
+                <title>Allow Everything</title>
+            </all>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <connector module="connector" translate="title">
+                                        <title>Simicart Connector</title>
+                                        <sort_order>71</sort_order>									
+                                    </connector>								
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                    <connector module="connector" translate="title">
+                        <title>SimiCart</title>
+                        <sort_order>71</sort_order>               
+                        <children>
+                            <core module="connector" translate="title">
+								<title>Connector Settings</title>      
+								<sort_order>0</sort_order>
+								<children>
+										<connector_app module="connector" translate="title">
+											<title>Apps</title>
+											<sort_order>0</sort_order>										
+										</connector_app>
+										<banner module="connector" translate="title">
+											<title>Banners</title>
+											<sort_order>10</sort_order>											
+										</banner>
+										<notice module="connector" translate="title">
+											<title>Notifications</title>
+											<sort_order>100</sort_order>											
+										</notice>
+										<cms module="connector" translate="title">
+											<title>CMS</title>
+											<sort_order>150</sort_order>											
+										</cms>
+										<promoteapp module="connector" translate="title">				
+											<title>Promote Apps</title>
+											<sort_order>170</sort_order>
+										</promoteapp>
+										<spotproduct module="connector" translate="title">				
+											<title>Spot Products</title>
+											<sort_order>160</sort_order>											
+										</spotproduct>
+										<trasfersimi module="connector" translate="title">
+											<title>Payment</title>
+											<sort_order>180</sort_order>											
+										</trasfersimi>	
+										<settings module="connector" translate="title">
+											<title>General Settings</title>
+											<sort_order>1000</sort_order>											
+										</settings>
+								</children>
+							</core>
+                        </children>
+                    </connector>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

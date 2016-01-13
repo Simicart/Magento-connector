@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category 	Magestore
+ * @package 	Magestore_Siminotification
+ * @copyright 	Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license 	http://www.magestore.com/license-agreement.html
+ */
+-->
+<layout version="0.1.0">
+	<siminotificationadmin_adminhtml_siminotification_index>
+		<reference name="content">
+			<block type="siminotification/adminhtml_siminotification" name="siminotification" />
+		</reference>
+	</siminotificationadmin_adminhtml_siminotification_index>
+
+	<siminotificationadmin_adminhtml_device_index>
+		<reference name="content">
+			<block type="siminotification/adminhtml_device" name="device" />
+		</reference>
+	</siminotificationadmin_adminhtml_device_index>
+
+	<siminotificationadmin_adminhtml_history_index>
+		<reference name="content">
+			<block type="siminotification/adminhtml_history" name="history" />
+		</reference>
+	</siminotificationadmin_adminhtml_history_index>
+
+	<siminotificationadmin_adminhtml_siminotification_guide>
+        <reference name="content">
+            <block type="siminotification/adminhtml_siminotification" name="siminotification_guide" as="siminotification_guide" template="siminotification/guide.phtml" />                            
+        </reference>
+    </siminotificationadmin_adminhtml_siminotification_guide>
+</layout>

@@ -1,0 +1,127 @@
+Device information,Device information
+Website,Website
+Device Type,Device Type
+iPhone,iPhone
+iPad,iPad
+Android,Android
+Country,Country
+State/Province,State/Province
+City,City
+Device Token,Device Token
+Create Date,Create Date
+Device Information,Device Information
+View Device ,View Device 
+Add Device,Add Device
+ID,ID
+Created Date,Created Date
+Action,Action
+View,View
+Delete,Delete
+Are you sure?,Are you sure?
+Device Manager,Device Manager
+Notification Information,Notification Information
+Show Popup,Show Popup
+Yes,Yes
+No,No
+Title,Title
+Image,Image
+Message,Message
+characters max: 250,characters max: 250
+Direct viewers to,Direct viewers to
+Product ID,Product ID
+Category ID,Category ID
+URL,URL
+Sent Date,Sent Date
+All,All
+IOS,IOS
+Sandbox mode,Sandbox mode
+Location,Location
+Radius,Radius
+Measure unit: %s,Measure unit: %s
+Address,Address
+Zip Code,Zip Code
+History Information,History Information
+View Message ,View Message 
+Add Message,Add Message
+Device,Device
+Type,Type
+Custom,Custom
+Price Updates,Price Updates
+New Product,New Product
+Order Purchase,Order Purchase
+Status,Status
+Successfully,Successfully
+Unsuccessfully,Unsuccessfully
+CSV,CSV
+XML,XML
+Notification History,Notification History
+Notification Content,Notification Content
+Choose a product,Choose a product
+Choose a category,Choose a category
+Product Name,Product Name
+SKU,SKU
+Send,Send
+Save And Continue Edit,Save And Continue Edit
+Preview,Preview
+Edit Message ,Edit Message 
+Redirect To,Redirect To
+Product Page,Product Page
+Category Page,Category Page
+Sandbox,Sandbox
+Edit,Edit
+Notification Manager,Notification Manager
+Add Notification,Add Notification
+All Countries,All Countries
+Product In-app,Product In-app
+Category In-app,Category In-app
+Website Page,Website Page
+Enabled,Enabled
+Disabled,Disabled
+Kilometers,Kilometers
+Miles,Miles
+Devices Manager,Devices Manager
+Device News,Device News
+Device does not exist,Device does not exist
+Device was successfully deleted,Device was successfully deleted
+Notification History Manager,Notification History Manager
+Notification History News,Notification History News
+Notification history does not exist,Notification history does not exist
+Notification history was successfully deleted,Notification history was successfully deleted
+Items Manager,Items Manager
+Item Manager,Item Manager
+Notification News,Notification News
+Notification does not exist,Notification does not exist
+Message was successfully saved,Message was successfully saved
+Unable to find item to send,Unable to find item to send
+Message was successfully deleted,Message was successfully deleted
+Google Application Guide,Google Application Guide
+SimiCart,SimiCart
+Notifications,Notifications
+Manage Notifications,Manage Notifications
+View Devices,View Devices
+History,History
+Connector Settings,Connector Settings
+Allow Everything,Allow Everything
+Simicart Connector,Simicart Connector
+Simi Extension,Simi Extension
+Notification Configuration,Notification Configuration
+Send Notification when Price Updated,Send Notification when Price Updated
+Send notification to all users when price of product is changed,Send notification to all users when price of product is changed
+Direct Viewers to,Direct Viewers to
+Sandbox Mode,Sandbox Mode
+Send Notification when there's a new product,Send Notification when there's a new product
+Send notification to all users when there's a new product,Send notification to all users when there's a new product
+Send Notification after customer purchase,Send Notification after customer purchase
+Send notification to a customer when he/she finish purchasing,Send notification to a customer when he/she finish purchasing
+Customer Groups,Customer Groups
+Google,Google
+Google Map API key,Google Map API key
+Distance Unit,Distance Unit
+Characters recommended: < 250,Characters recommended: < 250
+Unit to measure radius,Unit to measure radius
+Page,Page
+Previous page,Previous page
+Next page,Next page
+of %s pages,of %s pages
+per page,per page
+Total %d records found,Total %d records found
