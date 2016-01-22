@@ -92,4 +92,19 @@ class Simi_Connector_ConfigController extends Simi_Connector_Controller_Action {
         $this->_printDataJson($information);
     }
 
+    public function get_splash_dataAction(){
+        $data = $this->getData();
+        $device_id = $this->getDeviceId();
+        $information = Mage::getModel('connector/connector')->getSplashData($data, $device_id);
+        $this->_printDataJson($information);
+    }
+
+    public function get_home_dataAction(){
+        $data = $this->getData();
+        $device_id = $this->getDeviceId();
+        $information = Mage::getModel('connector/connector')->getHomeData($data, $device_id);
+        $this->_printDataJson($information);
+    }
+
+
 }
