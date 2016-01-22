@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<config>
+	<menu>
+		<connector>
+			<children>
+				<simipromoteapp module="simipromoteapp" translate="title">
+					<title>Promote Apps (New)</title>
+					<sort_order>71</sort_order>
+					<action>adminhtml/system_config/edit/section/simipromoteapp</action>
+					<children>
+						<simipromoteapp module="simipromoteapp" translate="title">
+							<title>Reports</title>
+							<sort_order>0</sort_order>
+							<action>simipromoteappadmin/adminhtml_simipromoteapp</action>
+						</simipromoteapp>
+						<settings module="simipromoteapp" translate="title">
+							<title>Settings</title>
+							<sort_order>1000</sort_order>
+							<action>adminhtml/system_config/edit/section/simipromoteapp</action>
+						</settings>
+					</children>
+				</simipromoteapp>
+			</children>
+		</connector>
+	</menu>
+	<acl>
+		<resources>
+			<all>
+				<title>Allow Everything</title>
+			</all>
+			<admin>
+				<children>
+					<system>
+						<children>
+							<config>
+								<children>
+									<simipromoteapp module="simipromoteapp" translate="title">
+										<title>Simipromoteapp</title>
+										<sort_order>71</sort_order>									
+									</simipromoteapp>								
+								</children>
+							</config>
+						</children>
+					</system>
+					<simipromoteapp module="simipromoteapp" translate="title">
+						<title>Simipromoteapp</title>
+						<sort_order>71</sort_order>               
+						<children>
+							<simipromoteapp module="simipromoteapp" translate="title">
+								<title>Manage Items</title>
+								<sort_order>0</sort_order>
+								<action>simipromoteappadmin/adminhtml_simipromoteapp</action>
+							</simipromoteapp>
+							<settings module="simipromoteapp" translate="title">
+								<title>Settings</title>
+								<sort_order>1000</sort_order>
+								<action>adminhtml/system_config/edit/section/simipromoteapp</action>
+							</settings>
+						</children>
+					</simipromoteapp>
+				</children>
+			</admin>
+		</resources>
+	</acl>
+</config>

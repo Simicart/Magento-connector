@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Simi_Simipromoteapp>
+			<active>true</active>
+			<codePool>local</codePool>
+		</Simi_Simipromoteapp>
+	</modules>
+</config>

@@ -1,0 +1,225 @@
+<?php
+
+$firstDateOfMonth = $this->getFirstDateOfMonth();
+$lastDateOfMonth = $this->getLastDateOfMonth();
+
+$data_request = $this->getRequest()->getParams();
+
+$data['from'] = $data_request['from_date'] != null ? $this->getHelperDateTime()->formatDateTime($data_request['from_date']) : $firstDateOfMonth;
+$data['to'] = $data_request['to_date'] != null ? $this->getHelperDateTime()->formatDateTime($data_request['to_date']) : $lastDateOfMonth;
+
+if (isset($data_request['all_time']) && $data_request['all_time'] == 1) {
+    $data = array();
+}
+
+?>
+<div id="simipromoteapp_report_header" class="simipromoteapp_report_header">
+    <div class="content-header">
+        <h3 class="icon-head simipromoteapp_report_header">App Transactions Report</h3>
+    </div>
+    <!-- Header content -->
+
+    <div class="entry-edit">
+        <div class="entry-edit-head">
+            <div class="entry-edit-head">
+                <h4 class="icon-head head-edit-form fieldset-legend">
+                    Report's Criteria
+                </h4>
+                <a style="display: none;" onclick="showReportCriteriaForm(); return false;" href="#"
+                   id="show_report_criteria"></a>
+                <a style="" onclick="hideReportCriteriaForm(); return false;" href="#" id="hide_report_criteria"></a>
+                <input type="hidden" id="is_show_report_criteria" name="is_show_report_criteria" value="1">
+            </div>
+        </div>
+        <div id="report_criteria_content" style="">
+            <div id="date_picker_form" class="fieldset ">
+                <form action="#" method="get" id="simipromoteapp_report_form">
+                    <table class="form-list">
+                        <tbody>
+                        <tr>
+                            <td class="label">
+                                <label for="time">
+                                    <strong>From:&nbsp;&nbsp;</strong>
+                                </label>
+                            </td>
+                            <td class="value">
+                                <?php echo $this->getHelperDateTime()->getDateField('from_date', $data['from']); ?>
+                            </td>
+                        </tr>
+
+                        <tr class="report_select_div">
+                            <td class="label">
+                                <label for="report_radio_select">
+                                    <strong>To:&nbsp;&nbsp;</strong>
+                                </label>
+                            </td>
+                            <td class="value">
+                                <?php echo $this->getHelperDateTime()->getDateField('to_date', $data['to']); ?>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="label"></td>
+                            <td class="value">
+                                <button class="show_report">Show Report</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+            <script type="text/javascript">
+                //< ![CDATA[
+                var simipromoteappForm = new varienForm('simipromoteapp_report_form', '');
+                //]]>
+            </script>
+            </div>
+        </div>
+    </div>
+<!-- End of header content -->
+</div>
+
+<div class="row-fluid intelligence-data tcenter ptl">
+    <div class="span3 data-well">
+        <h2 class="total_orders">0</h2>
+        <span class="light-text">
+            <span class="translation_missing" title="">
+                <?php echo $this->__('Total Orders') ?>
+            </span>
+        </span>
+    </div>
+    <div class="span3 data-well">
+        <h2 class="order_website">0</h2>
+        <span class="light-text">
+            <span class="translation_missing" title="">
+                <?php echo $this->__('Order via Website') ?>
+            </span>
+        </span>
+    </div>
+    <div class="span3 data-well">
+        <h2 class="order_app">0</h2>
+        <span class="light-text">
+            <span class="translation_missing" title="">
+                <?php echo $this->__('Order via Apps') ?>
+            </span>
+        </span>
+    </div>
+</div>
+
+<div style="clear:both"></div>
+
+<div id="container"></div>
+
+<script type="text/javascript">
+    var $simi = jQuery.noConflict();
+    var by_app = '<?php echo $this->getTextByApp();?>';
+    var by_website = '<?php echo $this->getTextByWebsite();?>';
+    var chart_title = '<?php echo $this->getChartTitle();?>';
+    var series_name = '<?php echo $this->getPercent();?>';
+
+    function defaultData(_by_app, _by_website){
+        return [{
+            name: by_app,
+            y: _by_app
+        }, {
+            name: by_website,
+            y: _by_website,
+            sliced: true,
+            selected: true
+        }];
+    }
+
+    function initChart(data){
+        $simi('#container').highcharts({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+            },
+            title: {
+                text: chart_title,
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                        style: {
+                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                        }
+                    }
+                }
+            },
+            series: [{
+                name: series_name,
+                colorByPoint: true,
+                data: data,
+            }]
+        });
+
+        // remove highchart.com text from chart
+        $simi('.highcharts-legend').attr('transform','');
+        $simi('text[text-anchor="end"][x="1341"]').hide();
+    }
+
+    $simi(document).ready(function () {
+        // prepare data for chart
+        renderChart();
+    });
+
+    $simi(document).on('click','.show_report',function(e){
+        e.preventDefault();
+        renderChart();
+        return false;
+    });
+
+    function renderChart(){
+        var url = '<?php echo $this->getUrl('simipromoteapp/order/report');?>';
+
+        new Ajax.Request(url, {
+            method:'post'
+            , parameters: {
+                from_date: $simi('#from_date').val(),
+                to_date: $simi('#to_date').val()
+            }
+            , requestHeaders: {Accept: 'application/json'},
+            onSuccess: function(transport) {
+                response = transport.responseText.evalJSON();
+
+                var data_report = defaultData(response.by_app, response.by_website);
+                $simi('.total_orders').html(response.total_orders);
+                $simi('.order_website').html(response.total_website);
+                $simi('.order_app').html(response.total_apps);
+                initChart(data_report);
+            },
+            onComplete: function(){
+
+            }
+        });
+    }
+
+</script>
+
+<style>
+    .span3.data-well {
+        display: inline-block;
+        width: 22%;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        text-align: center;
+        padding: 19px 10px;
+        margin-right: 0;
+        margin-bottom: 20px;
+        float: left;
+    }
+
+    .row-fluid.intelligence-data.tcenter.ptl{
+        padding-left: 303px;
+    }
+</style>

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+	<simipromoteappadmin_adminhtml_simipromoteapp_index>
+		<reference name="content">
+			<block type="simipromoteapp/adminhtml_simipromoteapp" name="simipromoteapp" />
+		</reference>
+	</simipromoteappadmin_adminhtml_simipromoteapp_index>
+
+	<appreportadmin_adminhtml_appreport_index>
+		<reference name="head">
+			<action method="addJs"><script>simi/jquery-1.11.1.min.js</script></action>
+			<action method="addJs"><script>simi/jquery-ui.min.js</script></action>
+			<action method="addJs"><script>simi/highcharts.js</script></action>
+			<action method="addJs"><script>simi/exporting.js</script></action>
+		</reference>
+		<reference name="content">
+			<block type="simipromoteapp/adminhtml_promoteapp" name="simipromoteapp" before="-"/>
+		</reference>
+	</appreportadmin_adminhtml_appreport_index>
+</layout>

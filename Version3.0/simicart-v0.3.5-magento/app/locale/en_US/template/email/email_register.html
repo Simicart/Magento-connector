@@ -1,0 +1,49 @@
+<!--@subject Email Subject @-->
+<!--@vars
+{"store url=\"\"":"Store Url",
+"skin url=\"images/logo_email.gif\" _area='frontend'":"Email Logo Image",
+"htmlescape var=$recipient_name":"Recipient Name",
+"htmlescape var=$recipient_email":"Recipient Email",
+"htmlescape var=$giftcode":"Gift Code",
+"htmlescape var=$amount":"Amount"
+}
+@-->
+<!--@styles
+body {background: #F6F6F6; margin: 0; padding: 0;}
+body, td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif; }
+@-->
+
+<body>
+<div>
+    <table cellspacing="0" cellpadding="0" border="0" height="100%" width="100%">
+        <tr>
+            <td align="center" valign="top">
+                <!-- [ header starts here] -->
+                <table bgcolor="FFFFFF" cellspacing="0" cellpadding="10" border="0" width="100%">
+                    <tr>
+                        <td valign="top">
+                            <!--<a href="{{store url=""}}" style="color:#1E7EC8;"><img src="{{skin url="images/logo_email.gif" _area='frontend'}}" alt="{{var store.getFrontendName()}}" border="0"/></a>-->
+                        </td>
+                    </tr>
+                    <!-- [ middle starts here] -->
+                    <tr>
+                        <td valign="top">
+                            <h3>Howdy,</h3>
+                            <br />Welcome you to join us!<br /><br />
+                            But wait...<br />
+                            Your journey is almost done, only one more step to get a pocketful of great shopping moments with us. Yah, whether you want to shop in the palm of your hand, you are golden with our mega-convenient app.<br /><br />
+                            By downloading our app, you can:
+                            <br />- Shop hundreds of products at your fingertips, literally.
+                            <br />- Never miss out the hottest products & best deals for mobile only by checking notifications.
+                            <br />- Order your goodies anytime and anywhere with a variety of payment methods.
+                            <br />- No need to keep checking your balance manually, mobile passbook will do that job.
+                            <br /><br /><strong>Wait no more!</strong> Enjoy shopping with our app  right NOW: {{if ios_link}}<a href="{{htmlescape var=\$ios_link}}" target="_blank" title="iOs app">iTune</a>{{/if}}  {{if ios_link}}<a href="{{htmlescape var=\$android_link}}" target="_blank" title="Android app">Android</a>{{/if}}
+                            <img style="display: none;" src="{{htmlescape var=\$log_link}}" alt="" width="0" height="0" border="0" />
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>

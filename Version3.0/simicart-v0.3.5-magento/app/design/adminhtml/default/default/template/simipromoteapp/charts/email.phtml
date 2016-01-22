@@ -1,0 +1,227 @@
+<?php
+
+$firstDateOfMonth = $this->getFirstDateOfMonth();
+$lastDateOfMonth = $this->getLastDateOfMonth();
+
+$data_request = $this->getRequest()->getParams();
+
+$data['from'] = $data_request['from_date'] != null ? $this->getHelperDateTime()->formatDateTime($data_request['from_date']) : $firstDateOfMonth;
+$data['to'] = $data_request['to_date'] != null ? $this->getHelperDateTime()->formatDateTime($data_request['to_date']) : $lastDateOfMonth;
+
+$total_email_sent = Mage::helper('simipromoteapp/report')->getTotalEmail($data, Simi_Simipromoteapp_Model_Status::TYPE_EMAIL_SENT);
+
+$total_open = Mage::helper('simipromoteapp/report')->getTotalEmail($data, Simi_Simipromoteapp_Model_Status::TYPE_EMAIL_OPEN);
+
+$open_rate = number_format(($total_open / $total_email_sent) * 100, 0);
+
+$data_highchart = Mage::helper('simipromoteapp/report')->reportEmail($data);
+$categories = '';
+$sent_highchart = '';
+$open_highchart = '';
+$count = sizeof($data_highchart);
+$is_last = 0;
+
+foreach ($data_highchart as $highchart) {
+    if($is_last == ($count - 1)){
+        $categories .= date('d',strtotime($highchart['current_date']));
+        $open_highchart .= $highchart['open_rate'];
+        $sent_highchart .= $highchart['total_sent'];
+    }
+    else {
+        $categories .= date('d', strtotime($highchart['current_date'])) . ',';
+        $open_highchart .= $highchart['open_rate'] . ',';
+        $sent_highchart .= $highchart['total_sent'] . ',';
+    }
+    $is_last++;
+}
+
+?>
+<div id="simipromoteapp_report_header" class="simipromoteapp_report_header">
+    <div class="content-header">
+        <h3 class="icon-head simipromoteapp_report_header">Email Report</h3>
+    </div>
+    <!-- Header content -->
+
+    <div class="entry-edit">
+        <div class="entry-edit-head">
+            <div class="entry-edit-head">
+                <h4 class="icon-head head-edit-form fieldset-legend">
+                    Report's Criteria
+                </h4>
+                <a onclick="showReportCriteriaForm(); return false;" href="#" id="show_report_criteria"></a>
+                <a onclick="hideReportCriteriaForm(); return false;" href="#" id="hide_report_criteria"></a>
+                <input type="hidden" id="is_show_report_criteria" name="is_show_report_criteria" value="1">
+            </div>
+        </div>
+        <div id="report_criteria_content" style="">
+            <div id="date_picker_form" class="fieldset ">
+                <form action="#" method="get" id="simipromoteapp_report_form">
+                    <table class="form-list">
+                        <tbody>
+                        <tr>
+                            <td class="label">
+                                <label for="time">
+                                    <strong>From:&nbsp;&nbsp;</strong>
+                                </label>
+                            </td>
+                            <td class="value">
+                                <?php echo $this->getHelperDateTime()->getDateField('from_date', $data['from']); ?>
+                            </td>
+                        </tr>
+
+                        <tr class="report_select_div">
+                            <td class="label">
+                                <label for="report_radio_select">
+                                    <strong>To:&nbsp;&nbsp;</strong>
+                                </label>
+                            </td>
+                            <td class="value">
+                                <?php echo $this->getHelperDateTime()->getDateField('to_date', $data['to']); ?>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="label"></td>
+                            <td class="value">
+                                <button class="show_report">Show Report</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+            <script type="text/javascript">
+                //< ![CDATA[
+                var simipromoteappForm = new varienForm('simipromoteapp_report_form', '');
+                //]]>
+            </script>
+            </div>
+        </div>
+    </div>
+<!-- End of header content -->
+</div>
+
+<div class="chart-content">
+    <div class="row-fluid intelligence-data tcenter ptl" id="total-data">
+        <div class="span3 data-well">
+            <h2 class="total_orders"><?php echo $total_email_sent;?></h2>
+        <span class="light-text">
+            <span class="translation_missing" title="">
+                <?php echo $this->__('No of email sent') ?>
+            </span>
+        </span>
+        </div>
+        <div class="span3 data-well">
+            <h2 class="order_website"><?php echo $open_rate;?>%</h2>
+        <span class="light-text">
+            <span class="translation_missing" title="">
+                <?php echo $this->__('Open rate') ?>
+            </span>
+        </span>
+        </div>
+    </div>
+
+    <div style="clear:both"></div>
+
+    <div id="container"></div>
+</div>
+
+<script type="text/javascript">
+    var $simi = jQuery.noConflict();
+    var by_app = '<?php echo $this->getTextByApp();?>';
+    var by_website = '<?php echo $this->getTextByWebsite();?>';
+    var chart_title = '<?php echo $this->getChartTitle();?>';
+    var series_name = '<?php echo $this->getPercent();?>';
+
+    $simi(document).ready(function () {
+        // prepare data for chart
+        $simi('#container').highcharts({
+            chart: {
+                zoomType: 'xy'
+            },
+            title: {
+                text: 'Email Report'
+            },
+            subtitle: {
+                text: 'Report By Daily'
+            },
+            xAxis: [{
+                categories: [<?php echo $categories;?>],
+                crosshair: true
+            }],
+            yAxis: [{ // Primary yAxis
+                labels: {
+                    format: '{value}%',
+                    style: {
+                        color: Highcharts.getOptions().colors[1]
+                    }
+                },
+                title: {
+                    text: 'Open Rate',
+                    style: {
+                        color: Highcharts.getOptions().colors[1]
+                    }
+                }
+            }, { // Secondary yAxis
+                title: {
+                    text: 'No of Email Sent',
+                    style: {
+                        color: Highcharts.getOptions().colors[0]
+                    }
+                },
+                labels: {
+                    format: '{value}',
+                    style: {
+                        color: Highcharts.getOptions().colors[0]
+                    }
+                },
+                opposite: true
+            }],
+            tooltip: {
+                shared: true
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'left',
+                x: 120,
+                verticalAlign: 'top',
+                y: 100,
+                floating: true,
+                backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+            },
+            series: [{
+                name: 'No of Email Sent',
+                type: 'column',
+                yAxis: 1,
+                data: [<?php echo $sent_highchart;?>],
+                tooltip: {
+                    valueSuffix: ''
+                }
+
+            }, {
+                name: 'Open Rate',
+                type: 'spline',
+                data: [<?php echo $open_highchart;?>],
+                tooltip: {
+                    valueSuffix: '%'
+                }
+            }]
+        });
+        // remove highchart.com text from chart
+        $simi('.highcharts-legend').attr('transform','');
+        $simi('.highcharts-container text[text-anchor="end"]').text('');
+
+    });
+
+    function showReportCriteriaForm(){
+        $simi('.chart-content').slideUp('1000');
+        $simi('#show_report_criteria').css('display','none');
+        $simi('#hide_report_criteria').css('display','inline-block');
+    }
+
+    function hideReportCriteriaForm(){
+        $simi('.chart-content').slideDown('1000');
+        $simi('#hide_report_criteria').css('display','none');
+        $simi('#show_report_criteria').css('display','inline-block');
+    }
+
+</script>

@@ -1,0 +1,24 @@
+<?php
+$type = $this->getData('data_type');
+$helper = Mage::helper('simipromoteapp');
+$image_first = $helper->getConfig(Simi_Simipromoteapp_Helper_Email::XML_IMAGE_FIRST_BLOCK);
+$image_second = $helper->getConfig(Simi_Simipromoteapp_Helper_Email::XML_IMAGE_SECOND_BLOCK);
+$image_small = $helper->getConfig(Simi_Simipromoteapp_Helper_Email::XML_IMAGE_SMALL_THIRD_BLOCK);
+$image_large = $helper->getConfig(Simi_Simipromoteapp_Helper_Email::XML_IMAGE_LARGE_THIRD_BLOCK);
+$image_fourth = $helper->getConfig(Simi_Simipromoteapp_Helper_Email::XML_IMAGE_FOURTH_BLOCK);
+
+if($type == 1){
+	echo '<img class="main-img" title="" src="'.$helper->getImageCms($image_first).'" alt="" />';
+} else if($type == 2){
+	echo '<img class="main-img" title="" src="'.$helper->getImageCms($image_second).'" alt="" />';
+} else if($type == 3){
+	echo '<img title="" src="'.$helper->getImageCms($image_small).'" alt="" />';
+} else if($type == 4){
+	echo '<img class="main-img" title="" src="'.$helper->getImageCms($image_large).'" alt="" />';
+} else if($type == 5){
+	echo '<img class="main-img" title="" src="'.$helper->getImageCms($image_fourth).'" alt="" />';
+} else {
+	echo '#';
+}
+
+?>

@@ -1,0 +1,40 @@
+.span3.data-well {
+    display: inline-block;
+    width: 22%;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: center;
+    padding: 19px 10px;
+    margin-right: 0;
+    margin-bottom: 20px;
+    float: left;
+}
+
+.row-fluid.intelligence-data.tcenter.ptl{
+    padding-left: 303px;
+}
+
+#show_report_criteria{
+    float: right;
+    display: inline-block;
+    height: 20px;
+    background: url("images/down.png") no-repeat;
+    width: 20px;
+}
+
+#hide_report_criteria{
+    display: none;
+    float: right;
+    height: 20px;
+    background: url("images/up.png") no-repeat;
+    width: 20px;
+}
+
+#container{
+    margin: 20px 0;
+}
+
+#simipromoteapp_click_header{
+    margin: 80px 0 0 0;
+}
