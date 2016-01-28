@@ -766,7 +766,7 @@ class Simi_Connector_Model_Customer extends Simi_Connector_Model_Abstract {
                 }
             }
         } else {
-            $options = array();
+            // $options = array();
             $optionsList = array();
             if (isset($options['additional_options'])) {
                 $optionsList = $options['additional_options'];
