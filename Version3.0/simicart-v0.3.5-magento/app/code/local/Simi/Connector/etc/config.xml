@@ -240,6 +240,7 @@
 				<is_show_all_product>1</is_show_all_product>
 				<cms_shipping_condition></cms_shipping_condition>
                 <is_reload_payment_method>0</is_reload_payment_method>
+				<show_product_type>0</show_product_type>
             </general>           
         </connector>  
         <payment>           
