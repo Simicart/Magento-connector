@@ -89,6 +89,7 @@ class Simi_Connector_Model_Config_App extends Simi_Connector_Model_Abstract {
                 'enable_agreements' => is_null(Mage::getStoreConfig('checkout/options/enable_agreements')) ? 0 : Mage::getStoreConfig('checkout/options/enable_agreements'),
 				'taxvat_show' => Mage::getStoreConfig('customer/create_account/vat_frontend_visibility'),
             ),
+			'view_products_default'=>Mage::getStoreConfig('connector/general/show_product_type'),
             'android_sender' => Mage::getStoreConfig('connector/android_sendid'),
         );
         $information = $this->statusSuccess();
