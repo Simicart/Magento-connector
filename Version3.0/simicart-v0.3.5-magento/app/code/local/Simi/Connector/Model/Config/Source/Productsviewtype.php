@@ -1,10 +1,23 @@
 <?php
+/**
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category    
+ * @package     Connector
+ * @copyright   Copyright (c) 2012 
+ * @license     
+ */
 
 /**
- * Created by PhpStorm.
- * User: taynv_000
- * Date: 10/21/2015
- * Time: 9:22 AM
+ * Connector Model
+ * 
+ * @category    
+ * @package     Connector
+ * @author      Developer
  */
 class Simi_Connector_Model_Config_Source_ProductsViewType
 {

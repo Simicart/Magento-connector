@@ -1,8 +1,23 @@
 <?php
+/**
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category    
+ * @package     Connector
+ * @copyright   Copyright (c) 2012 
+ * @license     
+ */
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * Connector Helper
+ * 
+ * @category    
+ * @package     Connector
+ * @author      Developer
  */
 
 class Simi_Connector_Helper_Paypal extends Mage_Core_Helper_Abstract {

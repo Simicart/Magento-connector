@@ -1,30 +1,23 @@
 <?php
 /**
- * Magestore
- * 
- * NOTICE OF LICENSE
- * 
- * This source file is subject to the Magestore.com license that is
- * available through the world-wide-web at this URL:
- * http://www.magestore.com/license-agreement.html
  * 
  * DISCLAIMER
  * 
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
  * 
- * @category    Magestore
- * @package     Magestore_Appreport
- * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
- * @license     http://www.magestore.com/license-agreement.html
+ * @category    
+ * @package     Appreport
+ * @copyright   Copyright (c) 2012
+ * @license     
  */
 
 /**
  * Appreport Grid Block
  * 
- * @category    Magestore
- * @package     Magestore_Appreport
- * @author      Magestore Developer
+ * @category    
+ * @package     Appreport
+ * @author      Developer
  */
 class Simi_Appreport_Block_Adminhtml_Appreport_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
@@ -180,7 +173,13 @@ class Simi_Appreport_Block_Adminhtml_Appreport_Grid extends Mage_Adminhtml_Block
         return false;
     }
 
-    public function getGridUrl() {
-        return $this->getUrl('adminhtml/sales_order/grid', array('_current' => true));
+    /**
+     * get url for using ajax reloading
+     *
+     * @return string
+     */
+    public function getGridUrl()
+    {
+        return $this->getUrl('*/*/grid', array('_current'=>true));
     }
 }
