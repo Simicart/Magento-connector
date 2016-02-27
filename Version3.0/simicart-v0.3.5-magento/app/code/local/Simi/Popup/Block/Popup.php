@@ -1,31 +1,24 @@
 <?php
 
 /**
- * Magestore
- * 
- * NOTICE OF LICENSE
- * 
- * This source file is subject to the Magestore.com license that is
- * available through the world-wide-web at this URL:
- * http://www.magestore.com/license-agreement.html
  * 
  * DISCLAIMER
  * 
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
  * 
- * @category 	Magestore
- * @package 	Magestore_Madapter
- * @copyright 	Copyright (c) 2012 Magestore (http://www.magestore.com/)
- * @license 	http://www.magestore.com/license-agreement.html
+ * @category    
+ * @package     Popup
+ * @copyright   Copyright (c) 2012 
+ * @license    
  */
 
 /**
- * Madapter Block
+ * Popup Block
  * 
- * @category 	Simi
- * @package 	Simi_Popup
- * @author  	Simi Developer
+ * @category    
+ * @package     Popup
+ * @author      Developer
  */
 class Simi_Popup_Block_Popup extends Mage_Core_Block_Template {
      

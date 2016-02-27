@@ -1,31 +1,24 @@
 <?php
 
 /**
- * Magestore
- * 
- * NOTICE OF LICENSE
- * 
- * This source file is subject to the Magestore.com license that is
- * available through the world-wide-web at this URL:
- * http://www.magestore.com/license-agreement.html
  * 
  * DISCLAIMER
  * 
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
  * 
- * @category    Magestore
- * @package     Magestore_Appreport
- * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
- * @license     http://www.magestore.com/license-agreement.html
+ * @category    
+ * @package     Appreport
+ * @copyright   Copyright (c) 2012 
+ * @license     
  */
 
 /**
  * Appreport Adminhtml Controller
  * 
- * @category    Magestore
- * @package     Magestore_Appreport
- * @author      Magestore Developer
+ * @category    
+ * @package     Appreport
+ * @author      Developer
  */
 class Simi_Appreport_Adminhtml_Appreport_AppreportController extends Mage_Adminhtml_Controller_Action {
 
@@ -75,6 +68,14 @@ class Simi_Appreport_Adminhtml_Appreport_AppreportController extends Mage_Adminh
 
     protected function _isAllowed() {
         return Mage::getSingleton('admin/session')->isAllowed('appreport');
+    }
+
+    /**
+     * gird action
+     */
+    public function gridAction(){       
+        $this->loadLayout();
+        $this->renderLayout();
     }
 
 }
