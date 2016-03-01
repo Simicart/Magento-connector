@@ -1,23 +1,30 @@
 <?php
 /**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
  * 
  * DISCLAIMER
  * 
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
  * 
- * @category    
- * @package     Connector
- * @copyright   Copyright (c) 2012 
- * @license     
+ * @category 	Magestore
+ * @package 	Magestore_Connector
+ * @copyright 	Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license 	http://www.magestore.com/license-agreement.html
  */
 
 /**
  * Connector Adminhtml Controller
  * 
- * @category    
- * @package     Connector
- * @author      Developer
+ * @category 	Simi
+ * @package 	Simi_Connector
+ * @author  	Simi Developer
  */
 class Simi_Connector_Adminhtml_Connector_ConnectorController extends Mage_Adminhtml_Controller_Action {
 
@@ -38,18 +45,7 @@ class Simi_Connector_Adminhtml_Connector_ConnectorController extends Mage_Adminh
      */
     public function indexAction() {
         $websiteId = Mage::getBlockSingleton('connector/adminhtml_web_switcher')->getWebsiteId();
-        $keyItem = Mage::getModel('connector/key')->getKey($websiteId);
-        if (count($keyItem->getData())) {
-            $app_list = Mage::getModel('connector/simicart_api')->getListApp($keyItem->getKeySecret());
-            if ($app_list->status == "FAIL") {
-                Mage::getModel('connector/plugin')->deleteList($websiteId);
-                Mage::getSingleton('adminhtml/session')->addError(Mage::helper('connector')->__('Authorize secret key is incorrect'));
-            } else {
-                Mage::getModel('connector/app')->saveList($app_list, $websiteId);
-                Mage::getModel('connector/plugin')->deleteList($websiteId);
-                Mage::getModel('connector/plugin')->saveList($app_list, $websiteId);
-            }
-        }
+        $keyItem = Mage::getModel('connector/key')->getKey($websiteId);        
         $this->_initAction()
                 ->renderLayout();
     }
@@ -245,22 +241,22 @@ class Simi_Connector_Adminhtml_Connector_ConnectorController extends Mage_Adminh
     public function saveKeyAction() {
         if ($data = $this->getRequest()->getPost()) {
             $key = $data["key_app"];
-            $websiteId = $data["website_id"];
-            try {
+            $websiteId = $data["website_id"];            
+            try {               
                 $app_list = Mage::getModel('connector/simicart_api')->getListApp($key);
                 // Zend_debug::dump($websiteId);die();
                 if ($app_list->status == "FAIL") {
                     Mage::getModel('connector/app')->deleteList($websiteId);
                     Mage::getModel('connector/plugin')->deleteList($websiteId);
                     Mage::getModel('connector/key')->setKey($key, $websiteId);
-                    Mage::getSingleton('adminhtml/session')->addError(Mage::helper('connector')->__('Authorize secret key is incorrect'));
+                    Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('connector')->__('The secret key was saved'));
                 } else {
                     Mage::getModel('connector/app')->saveList($app_list, $websiteId);
                     Mage::getModel('connector/plugin')->deleteList($websiteId);
                     Mage::getModel('connector/plugin')->saveList($app_list, $websiteId);
                     Mage::getModel('connector/key')->setKey($key, $websiteId);
-                    Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('connector')->__('Authorize secret key is correct'));
-                }
+                    Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('connector')->__('The secret key was saved'));
+                }                                
             } catch (Exception $e) {
                 Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
             }
