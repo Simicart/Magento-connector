@@ -67,7 +67,7 @@ class Simi_Appreport_Adminhtml_Appreport_AppreportController extends Mage_Adminh
     }
 
     protected function _isAllowed() {
-        return Mage::getSingleton('admin/session')->isAllowed('appreport');
+        return Mage::getSingleton('admin/session')->isAllowed('connector');
     }
 
     /**
