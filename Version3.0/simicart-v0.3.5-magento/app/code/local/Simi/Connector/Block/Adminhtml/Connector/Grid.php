@@ -1,23 +1,31 @@
 <?php
+
 /**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
  * 
  * DISCLAIMER
  * 
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
  * 
- * @category    
- * @package     Connector
- * @copyright   Copyright (c) 2012 
- * @license     
+ * @category 	Magestore
+ * @package 	Magestore_Connector
+ * @copyright 	Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license 	http://www.magestore.com/license-agreement.html
  */
 
 /**
  * Connector Grid Block
  * 
- * @category    
- * @package     Connector
- * @author      Developer
+ * @category 	Simi
+ * @package 	Simi_Connector
+ * @author  	Simi Developer
  */
 class Simi_Connector_Block_Adminhtml_Connector_Grid extends Mage_Adminhtml_Block_Widget_Grid {
 
@@ -68,16 +76,15 @@ class Simi_Connector_Block_Adminhtml_Connector_Grid extends Mage_Adminhtml_Block
     protected function _prepareColumns() {
         $this->addColumn('device_id', array(
             'header' => Mage::helper('connector')->__('Device'),
-            'align' => 'center',
-            'width' => '200px',
+            'align' => 'left',            
             'index' => 'device_id',
             'renderer' => 'connector/adminhtml_grid_renderer_device',
         ));
 
-        $this->addColumn('app_name', array(
-            'header' => Mage::helper('connector')->__('App name'),
-            'index' => 'app_name',
-        ));
+        // $this->addColumn('app_name', array(
+        //     'header' => Mage::helper('connector')->__('Status'),
+        //     'index' => 'app_name',
+        // ));
 		// $this->addColumn('app_id', array(
             // 'header' => Mage::helper('connector')->__('App Id'),
             // 'index' => 'app_id',
@@ -106,6 +113,7 @@ class Simi_Connector_Block_Adminhtml_Connector_Grid extends Mage_Adminhtml_Block
         $webId = Mage::getBlockSingleton('connector/adminhtml_web_switcher')->getWebsiteId();
         $this->addColumn('action', array(
             'header' => Mage::helper('connector')->__('Action'),
+            'align' => 'right',     
             'width' => '100',
             'type' => 'action',
             'getter' => 'getId',

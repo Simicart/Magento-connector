@@ -34,13 +34,13 @@
     </frontend>
     <admin>
         <routers>
-			<simipromoteappadmin>
-				<use>admin</use>
-				<args>
-					<module>Simi_Simipromoteapp</module>
-					<frontName>simipromoteappadmin</frontName>
-				</args>
-			</simipromoteappadmin>
+            <adminhtml> 
+                <args> 
+                    <modules> 
+                        <Simi_Simipromoteapp after="Mage_Adminhtml">Simi_Simipromoteapp_Adminhtml</Simi_Simipromoteapp>
+                    </modules> 
+                </args> 
+            </adminhtml>
         </routers>
     </admin>
     <adminhtml>

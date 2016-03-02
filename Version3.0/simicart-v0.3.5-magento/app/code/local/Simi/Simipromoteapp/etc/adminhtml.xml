@@ -11,7 +11,7 @@
 						<simipromoteapp module="simipromoteapp" translate="title">
 							<title>Reports</title>
 							<sort_order>0</sort_order>
-							<action>simipromoteappadmin/adminhtml_simipromoteapp</action>
+							<action>adminhtml/simipromoteapp_simipromoteapp</action>
 						</simipromoteapp>
 						<settings module="simipromoteapp" translate="title">
 							<title>Settings</title>
@@ -49,12 +49,10 @@
 							<simipromoteapp module="simipromoteapp" translate="title">
 								<title>Manage Items</title>
 								<sort_order>0</sort_order>
-								<action>simipromoteappadmin/adminhtml_simipromoteapp</action>
 							</simipromoteapp>
 							<settings module="simipromoteapp" translate="title">
 								<title>Settings</title>
 								<sort_order>1000</sort_order>
-								<action>adminhtml/system_config/edit/section/simipromoteapp</action>
 							</settings>
 						</children>
 					</simipromoteapp>
