@@ -1,6 +1,6 @@
 <?php
 
-class Simi_Simipromoteapp_Adminhtml_SimipromoteappController extends Mage_Adminhtml_Controller_Action
+class Simi_Simipromoteapp_Adminhtml_Simipromoteapp_SimipromoteappController extends Mage_Adminhtml_Controller_Action
 {
 	protected function _initAction(){
 		$this->loadLayout()
