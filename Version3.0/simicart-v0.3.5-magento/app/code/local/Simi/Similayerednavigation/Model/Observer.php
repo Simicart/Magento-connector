@@ -70,12 +70,16 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
                         if($item->getFilter()->getRequestVar() == 'cat' && $itemValues == $data->category_id)
                             continue;
                     }
-                     $refineArray['layer_state'][] = array(
-                        'attribute' => $item->getFilter()->getRequestVar(), 
-                        'title' => $item->getName(),
-                        'label' => (string) strip_tags($item->getLabel()), //filter request var and correlative name
-                        'value' => $itemValues,
+
+                    if(isset($item->getFilter()) && $item->getFilter()->getRequestVar() != null){
+                        $refineArray['layer_state'][] = array(
+                            'attribute' => $item->getFilter()->getRequestVar(),
+                            'title' => $item->getName(),
+                            'label' => (string) strip_tags($item->getLabel()), //filter request var and correlative name
+                            'value' => $itemValues,
                         ); //value of each option
+                    }
+
 
                 }
                 // $refineArray[] = $itemArray;
@@ -91,11 +95,14 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
                                 'label' => strip_tags($item->getLabel()), 
                             );
                         }
-                        $refineArray['layer_filter'][] = array(
-                                        'attribute' => $item->getFilter()->getRequestVar(), 
-                                        'title' => $item->getName(), //filter request var and correlative name
-                                        'filter' => $filter,
-                                        );
+
+                        if(isset($item->getFilter()) && $item->getFilter()->getRequestVar() != null) {
+                            $refineArray['layer_filter'][] = array(
+                                'attribute' => $item->getFilter()->getRequestVar(),
+                                'title' => $item->getName(), //filter request var and correlative name
+                                'filter' => $filter,
+                            );
+                        }
                     }                    
                 }
             }
@@ -104,6 +111,7 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
         $productList = $this->changeProductList($data, $table);
         $observerData['data'] = $productList['data'];
         $observerData['message'] = $productList['message'];
+        $observerData['other'][0]['product_id_array'] = $productList['other'];
         // $observerData['other'] = $productList['other'];
         $observerObject->setData($observerData);
     }
@@ -146,12 +154,15 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
                         if($item->getFilter()->getRequestVar() == 'cat' && $itemValues == $data->category_id)
                             continue;
                     }
-                     $refineArray['layer_state'][] = array(
-                        'attribute' => $item->getFilter()->getRequestVar(), 
-                        'title' => $item->getName(),
-                        'label' => (string) strip_tags($item->getLabel()), //filter request var and correlative name
-                        'value' => $itemValues,
+
+                    if(isset($item->getFilter()) && $item->getFilter()->getRequestVar() != null) {
+                        $refineArray['layer_state'][] = array(
+                            'attribute' => $item->getFilter()->getRequestVar(),
+                            'title' => $item->getName(),
+                            'label' => (string)strip_tags($item->getLabel()), //filter request var and correlative name
+                            'value' => $itemValues,
                         ); //value of each option
+                    }
 
                 }
                 // $refineArray[] = $itemArray;
@@ -167,11 +178,14 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
                                 'label' => strip_tags($item->getLabel()), 
                             );
                         }
-                        $refineArray['layer_filter'][] = array(
-                                        'attribute' => $item->getFilter()->getRequestVar(), 
-                                        'title' => $item->getName(), //filter request var and correlative name
-                                        'filter' => $filter,
-                                        );
+
+                        if(isset($item->getFilter()) && $item->getFilter()->getRequestVar() != null) {
+                            $refineArray['layer_filter'][] = array(
+                                'attribute' => $item->getFilter()->getRequestVar(),
+                                'title' => $item->getName(), //filter request var and correlative name
+                                'filter' => $filter,
+                            );
+                        }
                     }                    
                 }
             }
@@ -180,6 +194,7 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
         $productList = $this->changeProductList($data, $table);
         $observerData['data'] = $productList['data'];
         $observerData['message'] = $productList['message'];
+        $observerData['other'][0]['product_id_array'] = $productList['other'];
         // $observerData['other'] = $productList['other'];
         $observerObject->setData($observerData);
     }
@@ -222,12 +237,15 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
                         if($item->getFilter()->getRequestVar() == 'cat' && $itemValues == $data->category_id)
                             continue;
                     }
-                     $refineArray['layer_state'][] = array(
-                        'attribute' => $item->getFilter()->getRequestVar(), 
-                        'title' => $item->getName(),
-                        'label' => (string) strip_tags($item->getLabel()), //filter request var and correlative name
-                        'value' => $itemValues,
+
+                    if(isset($item->getFilter()) && $item->getFilter()->getRequestVar() != null) {
+                        $refineArray['layer_state'][] = array(
+                            'attribute' => $item->getFilter()->getRequestVar(),
+                            'title' => $item->getName(),
+                            'label' => (string)strip_tags($item->getLabel()), //filter request var and correlative name
+                            'value' => $itemValues,
                         ); //value of each option
+                    }
 
                 }
                 // $refineArray[] = $itemArray;
@@ -243,11 +261,14 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
                                 'label' => strip_tags($item->getLabel()), 
                             );
                         }
-                        $refineArray['layer_filter'][] = array(
-                                        'attribute' => $item->getFilter()->getRequestVar(), 
-                                        'title' => $item->getName(), //filter request var and correlative name
-                                        'filter' => $filter,
-                                        );
+
+                        if(isset($item->getFilter()) && $item->getFilter()->getRequestVar() != null) {
+                            $refineArray['layer_filter'][] = array(
+                                'attribute' => $item->getFilter()->getRequestVar(),
+                                'title' => $item->getName(), //filter request var and correlative name
+                                'filter' => $filter,
+                            );
+                        }
                     }                    
                 }
             }
@@ -376,6 +397,18 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
             $information['message'] = array($product_total);
             $information['data'] = $productList;
         }
+
+        $producIdArray = array();
+        $information['other'][0] = array(
+            'product_id_array' => array()
+        );
+
+        foreach ($productList as $_product) {
+            $producIdArray[] = $_product['product_id'];
+        }
+
+        $information['other'] = $producIdArray;
+
         return $information;
     }
 
