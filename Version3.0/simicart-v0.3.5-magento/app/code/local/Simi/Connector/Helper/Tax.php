@@ -299,7 +299,9 @@ class Simi_Connector_Helper_Tax extends Mage_Core_Helper_Abstract {
             }
 //            Mage::helper('connector/bundle_tax')->getPriceConfig($this->_product, $priveV2);
         }
-        $data['show_price_v2'] = $priveV2;
+        //$data['show_price_v2'] = $priveV2;
+        if(sizeof($priveV2) > 0)
+            $data['show_price_v2'] = $priveV2;
     }
 
     public function getDisplayMinimalPrice() {
