@@ -71,7 +71,7 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
                             continue;
                     }
 
-                    if(isset($item->getFilter()) && $item->getFilter()->getRequestVar() != null){
+                    if($item->getFilter()->getRequestVar() != null){
                         $refineArray['layer_state'][] = array(
                             'attribute' => $item->getFilter()->getRequestVar(),
                             'title' => $item->getName(),
@@ -96,7 +96,7 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
                             );
                         }
 
-                        if(isset($item->getFilter()) && $item->getFilter()->getRequestVar() != null) {
+                        if($item->getFilter()->getRequestVar() != null) {
                             $refineArray['layer_filter'][] = array(
                                 'attribute' => $item->getFilter()->getRequestVar(),
                                 'title' => $item->getName(), //filter request var and correlative name
@@ -155,7 +155,7 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
                             continue;
                     }
 
-                    if(isset($item->getFilter()) && $item->getFilter()->getRequestVar() != null) {
+                    if($item->getFilter()->getRequestVar() != null) {
                         $refineArray['layer_state'][] = array(
                             'attribute' => $item->getFilter()->getRequestVar(),
                             'title' => $item->getName(),
@@ -179,7 +179,7 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
                             );
                         }
 
-                        if(isset($item->getFilter()) && $item->getFilter()->getRequestVar() != null) {
+                        if($item->getFilter()->getRequestVar() != null) {
                             $refineArray['layer_filter'][] = array(
                                 'attribute' => $item->getFilter()->getRequestVar(),
                                 'title' => $item->getName(), //filter request var and correlative name
@@ -238,7 +238,7 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
                             continue;
                     }
 
-                    if(isset($item->getFilter()) && $item->getFilter()->getRequestVar() != null) {
+                    if($item->getFilter()->getRequestVar() != null) {
                         $refineArray['layer_state'][] = array(
                             'attribute' => $item->getFilter()->getRequestVar(),
                             'title' => $item->getName(),
@@ -262,7 +262,7 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
                             );
                         }
 
-                        if(isset($item->getFilter()) && $item->getFilter()->getRequestVar() != null) {
+                        if($item->getFilter()->getRequestVar() != null) {
                             $refineArray['layer_filter'][] = array(
                                 'attribute' => $item->getFilter()->getRequestVar(),
                                 'title' => $item->getName(), //filter request var and correlative name
