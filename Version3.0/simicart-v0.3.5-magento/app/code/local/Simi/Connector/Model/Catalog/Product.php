@@ -228,9 +228,9 @@ class Simi_Connector_Model_Catalog_Product extends Simi_Connector_Model_Catalog 
         
         foreach ($images['images'] as $image) {     
             // Zend_debug::dump($image['disabled']);
-            // if ($image['disabled'] == 0){
+            if ($image['disabled'] == 0){
                  $image_url[] = $this->getImageProduct($product, $image['file'], $width, $height);
-            // }           
+            }           
         }       
         if (count($image_url) == 0) {
             $image_url[] = $this->getImageProduct($product, null, $width, $height);

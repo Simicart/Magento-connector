@@ -20,6 +20,19 @@
  * @author      Developer
  */
 class Simi_Connector_CatalogController extends Simi_Connector_Controller_Action {
+    public function preDispatch()
+    {
+        parent::preDispatch();
+
+        $category = Mage::getModel('catalog/category')->getCollection()
+            ->addAttributeToSelect('*')
+            ->addAttributeToFilter('level', 2)
+            ->addAttributeToFilter('is_active', 1)
+            ->getFirstItem()
+            ;
+        Mage::getSingleton('catalog/session')->setLastVisitedCategoryId($category->getId());
+        Mage::register('current_category', $category);
+    }
 
     /**
      * index action

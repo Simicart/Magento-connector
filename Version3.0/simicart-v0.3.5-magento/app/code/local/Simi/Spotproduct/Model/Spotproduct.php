@@ -226,6 +226,7 @@ class Simi_Spotproduct_Model_Spotproduct extends Simi_Connector_Model_Abstract {
 					'product_price' => Mage::app()->getStore()->convertPrice($product->getFinalPrice(), false),
                     'product_image' => $this->getImageProduct($_currentProduct, null),
                 );
+                Mage::helper("connector/tax")->getProductTax($product, $info_product, true, false);
 				 $event_name = $this->getControllerName() . '_product_detail';
 				$event_value = array(
 					'object' => $this,
