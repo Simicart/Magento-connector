@@ -36,10 +36,10 @@ class Simi_Connector_Model_Checkout_Payment extends Simi_Connector_Model_Checkou
 
     protected function _setListPayment() {
         $this->_listPayment[] = 'zooz';
-		$this->_listPayment[] = 'transfer_mobile';
-		$this->_listPayment[] = 'cashondelivery';
+        $this->_listPayment[] = 'transfer_mobile';
+        $this->_listPayment[] = 'cashondelivery';
         $this->_listPayment[] = 'checkmo';      
-		$this->_listPayment[] = 'free';		
+        $this->_listPayment[] = 'free';     
     }
 
     protected function _getListPayment() {
@@ -58,7 +58,7 @@ class Simi_Connector_Model_Checkout_Payment extends Simi_Connector_Model_Checkou
             'transfer_mobile' => 0,
             'cashondelivery' => 0,
             'checkmo' => 0,         
-            'free' => 0,			
+            'free' => 0,            
         );
     }
 
@@ -67,9 +67,9 @@ class Simi_Connector_Model_Checkout_Payment extends Simi_Connector_Model_Checkou
     }
 
     public function addMethod($method_code, $type) {
-        $this->_listPayment[] = $method_code;		
+        $this->_listPayment[] = $method_code;       
         $this->_listPayment = array_unique($this->_listPayment);
-        $this->_listCase[$method_code] = $type;			
+        $this->_listCase[$method_code] = $type;         
     }
 
     public function savePaymentMethod($data) {
@@ -105,7 +105,7 @@ class Simi_Connector_Model_Checkout_Payment extends Simi_Connector_Model_Checkou
             $this->_getOnepage()->saveBilling($address_cache['billing_address'], $address_cache['billing_address']['customer_address_id']);
             $this->_getOnepage()->saveShipping($address_cache['shipping_address'], $address_cache['shipping_address']['customer_address_id']);
             $this->_getCheckoutSession()->getQuote()->getShippingAddress()->collectShippingRates()->save();
-            // save shipping	method
+            // save shipping    method
             $this->_getOnepage()->saveShippingMethod($shipping_method);
             $this->_getOnepage()->getQuote()->collectTotals()->save();
             //save payment method
@@ -125,9 +125,9 @@ class Simi_Connector_Model_Checkout_Payment extends Simi_Connector_Model_Checkou
         $methods = $this->getData('methods');
         if (is_null($methods)) {
             $store = $quote ? $quote->getStoreId() : null;
-            $methods = Mage::helper('payment')->getStoreMethods($store, $quote);		
-		// Zend_debug::dump($methods);die();				
-            foreach ($methods as $key => $method) {			
+            $methods = Mage::helper('payment')->getStoreMethods($store, $quote);        
+        // Zend_debug::dump($methods);die();                
+            foreach ($methods as $key => $method) {         
                 if ($this->_canUseMethod($method, $quote)
                         && (!in_array($method->getCode(), $this->_getListPaymentNoUse()) &&
                         (in_array($method->getCode(), $this->_getListPayment()) || $method->getConfigData('cctypes')))
@@ -139,7 +139,7 @@ class Simi_Connector_Model_Checkout_Payment extends Simi_Connector_Model_Checkou
                     unset($methods[$key]);
                 }
             }
-			
+            
             $this->setData('methods', $methods);
         }
         return $methods;
@@ -196,13 +196,13 @@ class Simi_Connector_Model_Checkout_Payment extends Simi_Connector_Model_Checkou
     public function getDetailsPayment($method) {
         $code = $method->getCode();
         $list = $this->getListCase();
-		
-		
-		$type = 1;
+        
+        
+        $type = 1;
         if (in_array($code, $this->_getListPayment())) {
-            $type = $list[$code];			
+            $type = $list[$code];           
         }
-	
+    
         $detail = array();
         if ($type == 0) {
             if ($code == "checkmo") {
@@ -222,20 +222,24 @@ class Simi_Connector_Model_Checkout_Payment extends Simi_Connector_Model_Checkou
             $detail['title'] = $method->getConfigData('title');
             $detail['useccv'] = $method->getConfigData('useccv');
             $detail['show_type'] = 1;
-        } elseif ($type == 2) {			
+        } elseif ($type == 2) {         
+            $m_code = strtoupper($method->getCode());
             $detail['email'] = $method->getConfigData('business_account');
             $detail['client_id'] = $method->getConfigData('client_id');
             $detail['is_sandbox'] = $method->getConfigData('is_sandbox');
-            $detail['payment_method'] = strtoupper($method->getCode());
+            $detail['payment_method'] = $m_code;
             $detail['title'] = $method->getConfigData('title');
-			$detail['bncode'] = "Magestore_SI_MagentoCE";
+            $detail['bncode'] = "Magestore_SI_MagentoCE";
             $detail['show_type'] = 2;
+            if(strcasecmp($m_code,'PAYPAL_MOBILE') == 0){
+                $detail['use_credit_card'] = Mage::getStoreConfig('payment/paypal_mobile/use_credit_cart');
+            }
         } elseif ($type == 3){
-			$detail['payment_method'] = strtoupper($method->getCode());
-            $detail['title'] = $method->getConfigData('title');			            
-            $detail['show_type'] = 3;				
-		}
-		
+            $detail['payment_method'] = strtoupper($method->getCode());
+            $detail['title'] = $method->getConfigData('title');                     
+            $detail['show_type'] = 3;               
+        }
+        
         return $detail;
     }
 
