@@ -239,7 +239,6 @@ class Simi_Connector_Model_Checkout_Payment extends Simi_Connector_Model_Checkou
             $detail['title'] = $method->getConfigData('title');                     
             $detail['show_type'] = 3;               
         }
-        
         return $detail;
     }
 
