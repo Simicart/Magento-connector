@@ -1,23 +1,31 @@
 <?php
+
 /**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
  * 
  * DISCLAIMER
  * 
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
  * 
- * @category    
- * @package     Connector
- * @copyright   Copyright (c) 2012 
- * @license     
+ * @category 	Simi
+ * @package 	Simi_Connector
+ * @copyright 	Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license 	http://www.magestore.com/license-agreement.html
  */
 
 /**
- * Connector Model
+ * Simi Model
  * 
- * @category    
- * @package     Connector
- * @author      Developer
+ * @category 	Simi
+ * @package 	Simi_Connector
+ * @author  	Simi Developer
  */
 class Simi_Connector_Model_Checkout extends Simi_Connector_Model_Abstract {
 
@@ -72,11 +80,14 @@ class Simi_Connector_Model_Checkout extends Simi_Connector_Model_Abstract {
      */
 
     public function getOrderConfig($data) {
+        $is_register_mode = false;
         try {
-            if ($this->customerLogin()) {
-                $this->_getOnepage()->saveCheckoutMethod('customer');
-            } elseif (isset($data->customer_password) && $data->customer_password) {
+            if (isset($data->customer_password) && $data->customer_password) {
+                $is_register_mode = true;
                 $this->_getOnepage()->saveCheckoutMethod('register');
+               
+            } elseif ($this->customerLogin()) {
+                  $this->_getOnepage()->saveCheckoutMethod('customer');
             } else {
                 $this->_getOnepage()->saveCheckoutMethod('guest');
             }
@@ -90,6 +101,21 @@ class Simi_Connector_Model_Checkout extends Simi_Connector_Model_Abstract {
         }
 
         $billing_address = $this->_helperCheckout()->convertBillingAddress($data);
+
+        if($is_register_mode){
+ 
+            $customer_email = $billing_address['email'];
+            $customer = Mage::getModel('customer/customer');
+            $customer->setWebsiteId(Mage::app()->getWebsite()->getId());
+            $customer->loadByEmail($customer_email);
+            if($customer->getId())
+            {
+                $information = $this->statusError(Mage::helper('connector')->__('There is already a customer registered using this email address. Please login using this email address or enter a different email address to register your account.'));
+                return $information;
+            } 
+        }
+ 
+        
         $address_cache = null;
         $shipping_address = $this->_helperCheckout()->convertShippingAddress($data); 
 		
