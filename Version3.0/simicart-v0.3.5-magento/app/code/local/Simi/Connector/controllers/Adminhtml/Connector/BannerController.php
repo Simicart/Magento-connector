@@ -121,7 +121,10 @@ class Simi_Connector_Adminhtml_Connector_BannerController extends Mage_Adminhtml
             if (isset($data['banner_name_co']['delete']) && $data['banner_name_co']['delete'] == 1) {                
                 Mage::helper('connector')->deleteBanner($data['banner_name_co']['value']);
                 $data['banner_name'] = '';
-            }         
+            }      
+            if(isset($data['type']) && $data['type'] != 2 && $data['type'] != 3){
+                $data['type'] = 1;
+            }   
             $model = Mage::getModel('connector/banner');
             $model->setData($data)
                     ->setId($this->getRequest()->getParam('id'));
