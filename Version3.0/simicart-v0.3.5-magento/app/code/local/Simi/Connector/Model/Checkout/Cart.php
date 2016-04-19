@@ -492,8 +492,8 @@ class Simi_Connector_Model_Checkout_Cart extends Simi_Connector_Model_Abstract {
         $cart = $this->_getCart();
         $message_error = array();
         if ($cart->getQuote()->getItemsCount()) {
-            $cart->init();
-            $cart->save();
+            // $cart->init();
+            // $cart->save();
             if (!$this->_getQuote()->validateMinimumAmount()) {
                 $minimumAmount = Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())
                         ->toCurrency(Mage::getStoreConfig('sales/minimum_order/amount'));
