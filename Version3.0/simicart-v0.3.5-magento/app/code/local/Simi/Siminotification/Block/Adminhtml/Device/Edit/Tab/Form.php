@@ -1,23 +1,30 @@
 <?php
 /**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
  * 
  * DISCLAIMER
  * 
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
  * 
- * @category 	
- * @package 	Siminotification
- * @copyright 	Copyright (c) 2012 
- * @license 	
+ * @category 	Magestore
+ * @package 	Magestore_Siminotification
+ * @copyright 	Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license 	http://www.magestore.com/license-agreement.html
  */
 
  /**
  * Siminotification Edit Form Content Tab Block
  * 
- * @category 	
- * @package 	Siminotification
- * @author      Developer
+ * @category 	Magestore
+ * @package 	Magestore_Siminotification
+ * @author  	Magestore Developer
  */
 class Simi_Siminotification_Block_Adminhtml_Device_Edit_Tab_Form extends Mage_Adminhtml_Block_Widget_Form
 {
@@ -92,7 +99,18 @@ class Simi_Siminotification_Block_Adminhtml_Device_Edit_Tab_Form extends Mage_Ad
             'bold'  => true,
             'name'  => 'created_date',
         )); 
-
+		
+		$fieldset->addField('is_demo', 'select', array(
+            'label' => Mage::helper('siminotification')->__('Is Demo'),
+            'bold'  => true,
+			'values' => array(
+                array('value' => 3, 'label' => Mage::helper('siminotification')->__('N/A')),
+                array('value' => 0, 'label' => Mage::helper('siminotification')->__('NO')),
+                array('value' => 1, 'label' => Mage::helper('siminotification')->__('YES')),
+            ),
+            'name'  => 'is_demo',
+			'disabled' => true,
+        )); 
 		$form->setValues($data);
 		return parent::_prepareForm();
 	}

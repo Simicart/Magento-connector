@@ -1,23 +1,31 @@
 <?php
+
 /**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
  * 
  * DISCLAIMER
  * 
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
  * 
- * @category    
- * @package     Connector
- * @copyright   Copyright (c) 2012 
- * @license     
+ * @category    Magestore
+ * @package     Magestore_Madapter
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
  */
 
 /**
  * Connector Model
  * 
- * @category    
- * @package     Connector
- * @author      Developer
+ * @category    Simi
+ * @package     Simi_Connector
+ * @author      Simi Developer
  */
 class Simi_Connector_Model_Device extends Simi_Connector_Model_Abstract {
 
@@ -26,11 +34,14 @@ class Simi_Connector_Model_Device extends Simi_Connector_Model_Abstract {
         $this->_init('connector/device');
     }
 
-    public function setDataDevice($data, $device_id) {
-        $website = Mage::app()->getStore()->getWebsiteId();  
+     public function setDataDevice($data, $device_id) {
+        $website = Mage::app()->getStore()->getWebsiteId(); 
         $latitude = $data->latitude;
         $longitude = $data->longitude;
         $addresses = $this->getAddress($latitude, $longitude);
+		$existed_device = $this->getCollection()->addFieldToFilter('device_token',$data->device_token)->getFirstItem();
+		if ($existed_device->getId());
+			$this->setId($existed_device->getId());
         if($addresses)
             $this->setData($addresses);      
         $this->setData('device_token', $data->device_token);
@@ -39,7 +50,13 @@ class Simi_Connector_Model_Device extends Simi_Connector_Model_Abstract {
         $this->setData('latitude', $data->latitude);
         $this->setData('longitude', $data->longitude);
         $this->setData('created_time', now());
-        try {
+		$this->setData('user_email', $data->user_email);
+		if (is_null ($data->demo_mode)) {
+			$this->setData('is_demo', 3);
+		}
+		else
+			$this->setData('is_demo', $data->demo_mode);
+		try {
             $this->save();
             $information = $this->statusSuccess();
             return $information;

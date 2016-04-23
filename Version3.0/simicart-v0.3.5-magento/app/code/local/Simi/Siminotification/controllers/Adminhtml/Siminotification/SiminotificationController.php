@@ -295,32 +295,68 @@ class Simi_Siminotification_Adminhtml_Siminotification_SiminotificationControlle
         // Zend_debug::dump($data);die();
         $payload = json_encode($body);
         $totalDevice = 0;
-        foreach ($collectionDevice as $item) {
-            $ctx = stream_context_create();
-            stream_context_set_option($ctx, 'ssl', 'local_cert', $ch);
-            if ((int) $data['notice_sanbox'] == 1 && (int) $data['device_id'] == 1) {
-                $fp = stream_socket_client('ssl://gateway.sandbox.push.apple.com:2195', $err, $errstr, 60, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $ctx);
-            } else {
-             $fp = stream_socket_client('ssl://gateway.push.apple.com:2195', $err, $errstr, 60, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $ctx);
-            }
-            if (!$fp) {
-             Mage::getSingleton('adminhtml/session')->addError("Failed to connect:" . $err . $errstr . PHP_EOL . "(IOS)");
-                return;
-            }
-        
-            $deviceToken = $item->getDeviceToken();
-            $msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
-            // Send it to the server
-            $result = fwrite($fp, $msg, strlen($msg));
-            if (!$result) {
-                Mage::getSingleton('adminhtml/session')->addError('Message not delivered (IOS)' . PHP_EOL);
-                return false;
-            }
-            fclose($fp);
-            $totalDevice++;
-        }
-        Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Message successfully delivered to %s devices (IOS)', $totalDevice));
-        return true;
+		switch ($data['notice_sanbox']) {
+			case '1': $sendLive = 0; $sendTest = 1; break;
+			case '2': $sendLive = 1; $sendTest = 0; break;
+			default: $sendLive = 1; $sendTest = 1; 
+		}
+		if ($sendLive && $sendTest) {
+			foreach ($collectionDevice as $item) {
+				$ctx = stream_context_create();
+				stream_context_set_option($ctx, 'ssl', 'local_cert', $ch);
+				if ((int) $data['notice_sanbox'] == 1 && (int) $data['device_id'] == 1) {
+					$fp = stream_socket_client('ssl://gateway.sandbox.push.apple.com:2195', $err, $errstr, 60, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $ctx);
+				} else {
+				 $fp = stream_socket_client('ssl://gateway.push.apple.com:2195', $err, $errstr, 60, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $ctx);
+				}
+				if (!$fp) {
+				 Mage::getSingleton('adminhtml/session')->addError("Failed to connect:" . $err . $errstr . PHP_EOL . "(IOS)");
+					return;
+				}
+			
+				$deviceToken = $item->getDeviceToken();
+				$msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
+				// Send it to the server
+				$result = fwrite($fp, $msg, strlen($msg));
+				if (!$result) {
+					Mage::getSingleton('adminhtml/session')->addError('Message not delivered (IOS)' . PHP_EOL);
+					return false;
+				}
+				fclose($fp);
+				$totalDevice++;
+			}
+			Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Message successfully delivered to %s devices (IOS)', $totalDevice));
+			return true;
+		}
+		else {
+			if ($sendLive) 
+				$collectionDevice->addFieldToFilter('is_demo',0);
+			else 
+				$collectionDevice->addFieldToFilter('is_demo',1);
+			$ctx = stream_context_create();
+			stream_context_set_option($ctx, 'ssl', 'local_cert', $ch);
+			$fp = stream_socket_client('ssl://gateway.push.apple.com:2195', $err, $errstr, 60, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $ctx);
+			if (!$fp) {
+			 Mage::getSingleton('adminhtml/session')->addError("Failed to connect:" . $err . $errstr . PHP_EOL . "(IOS)");
+				return;
+			}
+			
+			foreach ($collectionDevice as $item) {
+				$deviceToken = $item->getDeviceToken();
+				$msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
+				// Send it to the server
+				$result = fwrite($fp, $msg, strlen($msg));
+				if (!$result) {
+					Mage::getSingleton('adminhtml/session')->addError('Message not delivered (IOS)' . PHP_EOL);
+					return false;
+				}
+				$totalDevice++;
+			}			
+			fclose($fp);
+			Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Message successfully delivered to %s devices (IOS)', $totalDevice));
+			return true;
+			
+		}
     }
 
     public function repeatSendAnddroid($total, $collectionDevice, $message){

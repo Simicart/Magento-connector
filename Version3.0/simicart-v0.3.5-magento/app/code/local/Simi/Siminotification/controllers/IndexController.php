@@ -147,4 +147,14 @@ class Simi_Siminotification_IndexController extends Mage_Core_Controller_Front_A
 		");
 		$installer->endSetup();
 	}
+	
+	public function updateDBv1Action(){
+		$setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+		$installer->startSetup();
+		$installer->getConnection()->addColumn($installer->getTable('connector_device'), 'is_demo', 'tinyint(1) NULL default "3"');
+		$installer->getConnection()->addColumn($installer->getTable('connector_device'), 'user_email', 'varchar(255) NOT NULL default ""'); 
+		$installer->endSetup();
+		echo 'completed';
+	}
 }
