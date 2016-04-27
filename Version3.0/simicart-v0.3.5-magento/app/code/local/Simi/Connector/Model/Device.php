@@ -40,7 +40,7 @@ class Simi_Connector_Model_Device extends Simi_Connector_Model_Abstract {
         $longitude = $data->longitude;
         $addresses = $this->getAddress($latitude, $longitude);
 		$existed_device = $this->getCollection()->addFieldToFilter('device_token',$data->device_token)->getFirstItem();
-		if ($existed_device->getId());
+		if ($existed_device->getId())
 			$this->setId($existed_device->getId());
         if($addresses)
             $this->setData($addresses);      
@@ -63,6 +63,57 @@ class Simi_Connector_Model_Device extends Simi_Connector_Model_Abstract {
         } catch (Exception $e) {
             if (is_array($e->getMessage())) {
                 $information = $this->statusError($e->getMessage());
+                return $information;
+            } else {
+                $information = $this->statusError(array($e->getMessage()));
+                return $information;
+            }
+        }
+    }
+	
+	public function getNotificationList($data, $device_id) {
+		$existedDevice = $this->getCollection()->addFieldToFilter('device_token',$data->device_token)->getFirstItem();
+		$notificationList = array();
+		if ($existedDevice->getId()) {
+			$this->setId($existedDevice->getId());
+			$historyList = Mage::getModel('siminotification/history')->getCollection()
+							->addFieldToFilter('status','1')
+							->setOrder('history_id','desc');
+			foreach ($historyList as $historyItem) {
+				if ($historyItem->getData('devices_pushed')) {
+					if (in_array($existedDevice->getId(), explode(",", $historyItem->getData('devices_pushed')))){
+						$notificationList[] = array('id'=>$historyItem->getData('history_id'),
+							'notice_title'=>$historyItem->getData('notice_title'),
+							'notice_url'=>$historyItem->getData('notice_url'),
+							'notice_content'=>$historyItem->getData('notice_content'),						
+							'notice_sanbox'=>$historyItem->getData('notice_sanbox'),
+							'website_id'=>$historyItem->getData('website_id'),
+							'type'=>$historyItem->getData('type'),
+							'category_id'=>$historyItem->getData('category_id'),
+							'product_id'=>$historyItem->getData('product_id'),						
+							'image_url'=>$historyItem->getData('image_url'),
+							'location'=>$historyItem->getData('location'),
+							'distance'=>$historyItem->getData('distance'),
+							'address'=>$historyItem->getData('address'),
+							'city'=>$historyItem->getData('city'),
+							'country'=>$historyItem->getData('country'),
+							'zipcode'=>$historyItem->getData('zipcode'),
+							'state'=>$historyItem->getData('state'),
+							'show_popup'=>$historyItem->getData('show_popup'),
+							'notice_type'=>$historyItem->getData('notice_type'),
+							'status'=>$historyItem->getData('status'));
+					}
+				}
+			}		
+		}
+		
+		try {
+            $information = $this->statusSuccess();
+			$information['data'] = $notificationList;
+            return $information;
+        } catch (Exception $e) {
+            if (is_array($e->getMessage())) {
+                $information = $this->statusError($e->getMessage());				
                 return $information;
             } else {
                 $information = $this->statusError(array($e->getMessage()));

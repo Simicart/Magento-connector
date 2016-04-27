@@ -196,7 +196,7 @@ class Simi_Siminotification_Adminhtml_Siminotification_SiminotificationControlle
         return $trans;
     }
 
-    public function send($data) {
+    public function send(&$data) {
         if($data['category_id']){
             $categoryId = $data['category_id'];
             $category = Mage::getModel('catalog/category')->load($categoryId);                                    
@@ -243,8 +243,13 @@ class Simi_Siminotification_Adminhtml_Siminotification_SiminotificationControlle
             $collectionDevice->addFieldToFilter('zipcode', array('like' => '%' . $data['zipcode'] . '%'));
             $collectionDevice2->addFieldToFilter('zipcode', array('like' => '%' . $data['zipcode'] . '%'));
         }
+		
+		foreach ($collectionDevice as $item) {
+			if (($data['website_id']== null) || (($item->getWebsiteId()) && ($data['website_id']== $item->getWebsiteId())))
+				$data['connector_notice_history'].= $item->getId().',';
+		}   
+		
         if ((int) $data['device_id'] != 0) {
-            $collectionDevice->addFieldToFilter('website_id', array('eq' => $website));
             if ((int) $data['device_id'] == 2) {
                 //send android
                 $collectionDevice->addFieldToFilter('plaform_id', array('eq' => 3));
@@ -277,7 +282,7 @@ class Simi_Siminotification_Adminhtml_Siminotification_SiminotificationControlle
         $message = $data['notice_content'];
         $body['aps'] = array(
             'alert' => $data['notice_title'],
-            'sound' => 'default',
+            'sound' => 'default', 
             'badge' => 1,
             'title' => $data['notice_title'],
             'message' => $message,

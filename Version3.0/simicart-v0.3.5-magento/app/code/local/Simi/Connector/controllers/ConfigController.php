@@ -77,6 +77,13 @@ class Simi_Connector_ConfigController extends Simi_Connector_Controller_Action {
         $information = Mage::getModel('connector/device')->setDataDevice($data, $device_id);
         $this->_printDataJson($information);
     }
+	
+	public function get_notification_listAction() {
+        $data = $this->getData();
+        $device_id = $this->getDeviceId();
+        $information = Mage::getModel('connector/device')->getNotificationList($data, $device_id);
+        $this->_printDataJson($information);
+    }
 
     public function get_pluginsAction() {
         $device_id = $this->getDeviceId();
