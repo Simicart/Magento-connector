@@ -312,10 +312,10 @@ class Simi_Siminotification_Adminhtml_Siminotification_SiminotificationControlle
 				if ((int) $data['notice_sanbox'] == 1 && (int) $data['device_id'] == 1) {
 					$fp = stream_socket_client('ssl://gateway.sandbox.push.apple.com:2195', $err, $errstr, 60, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $ctx);
 				} else {
-				 $fp = stream_socket_client('ssl://gateway.push.apple.com:2195', $err, $errstr, 60, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $ctx);
+					$fp = stream_socket_client('ssl://gateway.push.apple.com:2195', $err, $errstr, 60, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $ctx);
 				}
 				if (!$fp) {
-				 Mage::getSingleton('adminhtml/session')->addError("Failed to connect:" . $err . $errstr . PHP_EOL . "(IOS)");
+					Mage::getSingleton('adminhtml/session')->addError("Failed to connect:" . $err . $errstr . PHP_EOL . "(IOS)");
 					return;
 				}
 			
@@ -334,13 +334,16 @@ class Simi_Siminotification_Adminhtml_Siminotification_SiminotificationControlle
 			return true;
 		}
 		else {
-			if ($sendLive) 
-				$collectionDevice->addFieldToFilter('is_demo',0);
-			else 
-				$collectionDevice->addFieldToFilter('is_demo',1);
 			$ctx = stream_context_create();
 			stream_context_set_option($ctx, 'ssl', 'local_cert', $ch);
-			$fp = stream_socket_client('ssl://gateway.push.apple.com:2195', $err, $errstr, 60, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $ctx);
+			if ($sendLive){
+				$fp = stream_socket_client('ssl://gateway.push.apple.com:2195', $err, $errstr, 60, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $ctx);
+				$collectionDevice->addFieldToFilter('is_demo',0);
+			}
+			else {
+				$fp = stream_socket_client('ssl://gateway.sandbox.push.apple.com:2195', $err, $errstr, 60, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $ctx);
+				$collectionDevice->addFieldToFilter('is_demo',1);
+			}
 			if (!$fp) {
 			 Mage::getSingleton('adminhtml/session')->addError("Failed to connect:" . $err . $errstr . PHP_EOL . "(IOS)");
 				return;
