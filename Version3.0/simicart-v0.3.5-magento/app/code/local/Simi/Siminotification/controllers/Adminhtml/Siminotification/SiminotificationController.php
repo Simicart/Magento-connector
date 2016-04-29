@@ -191,6 +191,11 @@ class Simi_Siminotification_Adminhtml_Siminotification_SiminotificationControlle
             $data['status'] = 0;
         else
             $data['status'] = 1;
+		$collectionDevice = $data['collection_device'];
+		foreach ($collectionDevice as $item) {
+			if (($data['website_id']== null) || (($item->getWebsiteId()) && ($data['website_id']== $item->getWebsiteId())))
+				$data['connector_notice_history'].= $item->getId().',';
+		} 
         $history->setData($data);
         $history->save();
         return $trans;
@@ -243,11 +248,12 @@ class Simi_Siminotification_Adminhtml_Siminotification_SiminotificationControlle
             $collectionDevice->addFieldToFilter('zipcode', array('like' => '%' . $data['zipcode'] . '%'));
             $collectionDevice2->addFieldToFilter('zipcode', array('like' => '%' . $data['zipcode'] . '%'));
         }
-		
-		foreach ($collectionDevice as $item) {
-			if (($data['website_id']== null) || (($item->getWebsiteId()) && ($data['website_id']== $item->getWebsiteId())))
-				$data['connector_notice_history'].= $item->getId().',';
-		}   
+		switch ($data['notice_sanbox']) {
+			case '1': $sendLive = 0; $sendTest = 1; $collectionDevice->addFieldToFilter('is_demo',1); break;
+			case '2': $sendLive = 1; $sendTest = 0; $collectionDevice->addFieldToFilter('is_demo',0); break;
+			default: $sendLive = 1; $sendTest = 1; 
+		}
+		$data['collection_device'] = $collectionDevice;
 		
         if ((int) $data['device_id'] != 0) {
             if ((int) $data['device_id'] == 2) {
@@ -297,58 +303,39 @@ class Simi_Siminotification_Adminhtml_Siminotification_SiminotificationControlle
             'width'     => $data['width'],
             'show_popup'   => $data['show_popup'],
         );
-        // Zend_debug::dump($data);die();
         $payload = json_encode($body);
         $totalDevice = 0;
-		switch ($data['notice_sanbox']) {
-			case '1': $sendLive = 0; $sendTest = 1; break;
-			case '2': $sendLive = 1; $sendTest = 0; break;
-			default: $sendLive = 1; $sendTest = 1; 
-		}
-		if ($sendLive && $sendTest) {
+		if ($data['notice_sanbox'] == '0') { //send the old way
 			foreach ($collectionDevice as $item) {
-				$ctx = stream_context_create();
-				stream_context_set_option($ctx, 'ssl', 'local_cert', $ch);
-				if ((int) $data['notice_sanbox'] == 1 && (int) $data['device_id'] == 1) {
-					$fp = stream_socket_client('ssl://gateway.sandbox.push.apple.com:2195', $err, $errstr, 60, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $ctx);
-				} else {
-					$fp = stream_socket_client('ssl://gateway.push.apple.com:2195', $err, $errstr, 60, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $ctx);
-				}
-				if (!$fp) {
-					Mage::getSingleton('adminhtml/session')->addError("Failed to connect:" . $err . $errstr . PHP_EOL . "(IOS)");
-					return;
-				}
-			
-				$deviceToken = $item->getDeviceToken();
-				$msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
-				// Send it to the server
-				$result = fwrite($fp, $msg, strlen($msg));
-				if (!$result) {
-					Mage::getSingleton('adminhtml/session')->addError('Message not delivered (IOS)' . PHP_EOL);
-					return false;
-				}
-				fclose($fp);
-				$totalDevice++;
+			$ctx = stream_context_create();
+			stream_context_set_option($ctx, 'ssl', 'local_cert', $ch);
+			//$fp = stream_socket_client('ssl://gateway.sandbox.push.apple.com:2195', $err, $errstr, 60, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $ctx);
+			$fp = stream_socket_client('ssl://gateway.push.apple.com:2195', $err, $errstr, 60, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $ctx);
+			if (!$fp) {
+			 Mage::getSingleton('adminhtml/session')->addError("Failed to connect:" . $err . $errstr . PHP_EOL . "(IOS)");
+				return;
+			}		
+			$deviceToken = $item->getDeviceToken();
+			$msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
+			// Send it to the server
+			$result = fwrite($fp, $msg, strlen($msg));
+			if (!$result) {
+				Mage::getSingleton('adminhtml/session')->addError('Message not delivered (IOS)' . PHP_EOL);
+				return false;
 			}
-			Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Message successfully delivered to %s devices (IOS)', $totalDevice));
-			return true;
+			$totalDevice++;					
+			fclose($fp);
+			}	
 		}
 		else {
 			$ctx = stream_context_create();
 			stream_context_set_option($ctx, 'ssl', 'local_cert', $ch);
-			if ($sendLive){
-				$fp = stream_socket_client('ssl://gateway.push.apple.com:2195', $err, $errstr, 60, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $ctx);
-				$collectionDevice->addFieldToFilter('is_demo',0);
-			}
-			else {
-				$fp = stream_socket_client('ssl://gateway.sandbox.push.apple.com:2195', $err, $errstr, 60, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $ctx);
-				$collectionDevice->addFieldToFilter('is_demo',1);
-			}
+			//$fp = stream_socket_client('ssl://gateway.sandbox.push.apple.com:2195', $err, $errstr, 60, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $ctx);
+			$fp = stream_socket_client('ssl://gateway.push.apple.com:2195', $err, $errstr, 60, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $ctx);
 			if (!$fp) {
 			 Mage::getSingleton('adminhtml/session')->addError("Failed to connect:" . $err . $errstr . PHP_EOL . "(IOS)");
 				return;
-			}
-			
+			}		
 			foreach ($collectionDevice as $item) {
 				$deviceToken = $item->getDeviceToken();
 				$msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
@@ -361,10 +348,10 @@ class Simi_Siminotification_Adminhtml_Siminotification_SiminotificationControlle
 				$totalDevice++;
 			}			
 			fclose($fp);
-			Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Message successfully delivered to %s devices (IOS)', $totalDevice));
-			return true;
-			
 		}
+		Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Message successfully delivered to %s devices (IOS)', $totalDevice));
+		return true;
+			
     }
 
     public function repeatSendAnddroid($total, $collectionDevice, $message){
