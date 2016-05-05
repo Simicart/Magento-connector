@@ -23,15 +23,27 @@ class Simi_Connector_CatalogController extends Simi_Connector_Controller_Action 
     public function preDispatch()
     {
         parent::preDispatch();
+        $data = $this->getData();
 
-        $category = Mage::getModel('catalog/category')->getCollection()
-            ->addAttributeToSelect('*')
-            ->addAttributeToFilter('level', 2)
-            ->addAttributeToFilter('is_active', 1)
-            ->getFirstItem()
-            ;
-        Mage::getSingleton('catalog/session')->setLastVisitedCategoryId($category->getId());
-        Mage::register('current_category', $category);
+        if(isset($data->category_id) && $data->category_id){
+            $category = Mage::getModel('catalog/category')->load($data->category_id);
+            if(isset($data->auction) && $data->auction){
+                $category->setIsAnchor(1)
+                    ->setName(Mage::helper('core')->__('Auctions'))
+                    ->setDisplayMode('PRODUCTS');
+            }
+
+            Mage::register('current_category', $category);
+        }else{
+            $category = Mage::getModel('catalog/category')->load(Mage::app()->getStore()->getRootCategoryId());
+            if(isset($data->auction) && $data->auction){
+                $category->setIsAnchor(1)
+                    ->setName(Mage::helper('core')->__('Auctions'))
+                    ->setDisplayMode('PRODUCTS');
+            }
+
+            Mage::register('current_category', $category);
+        }
     }
 
     /**

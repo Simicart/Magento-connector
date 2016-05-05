@@ -1,22 +1,29 @@
 <?xml version="1.0"?>
 <!--
 /**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
  * 
  * DISCLAIMER
  * 
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
  * 
- * @category    
- * @package     Siminotification
- * @copyright   Copyright (c) 2012 
- * @license     
+ * @category 	Magestore
+ * @package 	Magestore_Siminotification
+ * @copyright 	Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license 	http://www.magestore.com/license-agreement.html
  */
 -->
 <config>
     <modules>
         <Simi_Siminotification>
-            <version>0.1.0</version>
+            <version>0.1.1</version>
         </Simi_Siminotification>
     </modules>
     <frontend>

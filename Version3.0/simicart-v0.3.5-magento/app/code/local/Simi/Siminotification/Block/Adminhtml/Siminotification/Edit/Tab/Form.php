@@ -55,7 +55,18 @@ class Simi_Siminotification_Block_Adminhtml_Siminotification_Edit_Tab_Form exten
             'values' => $list_web,
         ));
 
-         $fieldset->addField('show_popup', 'select', array(
+         $fieldset->addField('notice_sanbox', 'select', array(
+            'label' => Mage::helper('siminotification')->__('Send To'),
+            'name' => 'notice_sanbox',
+            'values' => array(			
+                array('value' => 0, 'label' => Mage::helper('siminotification')->__('Both Live App and Test App')),
+                array('value' => 1, 'label' => Mage::helper('siminotification')->__('Test App')),
+                array('value' => 2, 'label' => Mage::helper('siminotification')->__('Live App')),
+            ),
+            'note' => '',
+        ));
+		
+		$fieldset->addField('show_popup', 'select', array(
             'label' => Mage::helper('siminotification')->__('Show Popup'),
             'name' => 'show_popup',
             'values' => array(

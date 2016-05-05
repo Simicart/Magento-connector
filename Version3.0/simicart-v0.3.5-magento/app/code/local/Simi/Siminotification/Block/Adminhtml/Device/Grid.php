@@ -1,23 +1,30 @@
 <?php
 /**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
  * 
  * DISCLAIMER
  * 
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
  * 
- * @category    
- * @package     Siminotification
- * @copyright   Copyright (c) 2012 
- * @license     
+ * @category 	Magestore
+ * @package 	Magestore_Siminotification
+ * @copyright 	Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license 	http://www.magestore.com/license-agreement.html
  */
 
  /**
  * Siminotification Grid Block
  * 
- * @category    
- * @package     Siminotification
- * @author      Developer
+ * @category 	Magestore
+ * @package 	Magestore_Siminotification
+ * @author  	Magestore Developer
  */
 class Simi_Siminotification_Block_Adminhtml_Device_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
@@ -72,7 +79,7 @@ class Simi_Siminotification_Block_Adminhtml_Device_Grid extends Mage_Adminhtml_B
                 2 => Mage::helper('siminotification')->__('iPad'),
             ),
         ));
-
+		
         $this->addColumn('city', array(
             'header'    => Mage::helper('siminotification')->__('City'),
             'width'  => '150px',
@@ -98,6 +105,19 @@ class Simi_Siminotification_Block_Adminhtml_Device_Grid extends Mage_Adminhtml_B
         //     'align' => 'left',
         //     'index' => 'device_token',
         // ));
+		
+		$this->addColumn('is_demo', array(
+            'header'    => Mage::helper('siminotification')->__('Is Demo'),
+            'width'     => '150px',
+            'align'     => 'right',
+            'index'     => 'is_demo',
+			'type'      => 'options',
+            'options'    => array(
+                3 => Mage::helper('siminotification')->__('N/A'),
+                0 => Mage::helper('siminotification')->__('NO'),
+                1 => Mage::helper('siminotification')->__('YES'),
+            ),
+        ));
 
         $this->addColumn('created_time', array(
             'header'    => Mage::helper('siminotification')->__('Created Date'),
