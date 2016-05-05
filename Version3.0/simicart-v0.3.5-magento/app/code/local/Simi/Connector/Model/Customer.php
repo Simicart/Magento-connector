@@ -295,6 +295,7 @@ class Simi_Connector_Model_Customer extends Simi_Connector_Model_Abstract {
                 if (strlen($newPass)) {
                     $customer->setPassword($newPass);
                     $customer->setConfirmation($confPass);
+                    $customer->setPasswordConfirmation($confPass);
                 } else {
                     return $this->statusError(array($this->_helperCustomer()->__('New password field cannot be empty')));
                 }
