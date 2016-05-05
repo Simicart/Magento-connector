@@ -28,7 +28,7 @@ class Simi_Connector_ConfigController extends Simi_Connector_Controller_Action {
 
     public function get_store_viewAction() {
         $data = $this->getData();
-        if ($data && $data->store_id) {
+        if (isset($data->store_id) && $data->store_id) {
             Mage::app()->getCookie()->set(Mage_Core_Model_Store::COOKIE_NAME, Mage::app()->getStore($data->store_id)->getCode(), TRUE);
             Mage::app()->setCurrentStore(
                     Mage::app()->getStore($data->store_id)->getCode()

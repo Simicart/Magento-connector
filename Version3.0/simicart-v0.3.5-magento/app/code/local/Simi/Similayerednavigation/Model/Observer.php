@@ -32,6 +32,56 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
         return $this;
     }
 
+    public function getItemsShopBy($block){
+        $_children = $block->getChild();
+        $refineArray = array();
+        foreach ($_children as $index => $_child) {
+            if ($index == 'layer_state') {
+                // $itemArray = array();
+                foreach ($_child->getActiveFilters() as $item) {
+                    $itemValues = array();
+                    $itemValues = $item->getValue();
+                    if(is_array($itemValues)){
+                        $itemValues = implode('-', $itemValues);
+                    }
+
+                    if($item->getFilter()->getRequestVar() != null){
+                        $refineArray['layer_state'][] = array(
+                            'attribute' => $item->getFilter()->getRequestVar(),
+                            'title' => $item->getName(),
+                            'label' => (string) strip_tags($item->getLabel()), //filter request var and correlative name
+                            'value' => $itemValues,
+                        ); //value of each option
+                    }
+                }
+                // $refineArray[] = $itemArray;
+            }else{
+                $items = $_child->getItems();
+                $itemArray = array();
+                foreach ($items as $index => $item) {
+                    $filter = array();
+                    if ($index == 0) {
+                        foreach ($items as $index => $item){
+                            $filter[] = array(
+                                'value' => $item->getValue(), //value of each option
+                                'label' => strip_tags($item->getLabel()),
+                            );
+                        }
+
+                        if($item->getFilter()->getRequestVar() != null) {
+                            $refineArray['layer_filter'][] = array(
+                                'attribute' => $item->getFilter()->getRequestVar(),
+                                'title' => $item->getName(), //filter request var and correlative name
+                                'filter' => $filter,
+                            );
+                        }
+                    }
+                }
+            }
+        }
+        return $refineArray;
+    }
+
     public function connectorCatalogGetAllProductsReturn($observer) {  
         $observerObject = $observer->getObject();
         $observerData = $observer->getObject()->getData();
@@ -50,67 +100,26 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
         $filter = array();
         $filter = $data->filter;
         $params = json_decode(json_encode($filter), true);
-        // if(in_array($filter))
+        if (is_array($filter) || is_object($filter))
         foreach ($params as $key => $value) {
             $observerObject->getRequest()->setParam($key,$value);
         }
+
         $table = $observerObject->getLayout()->createBlock('catalog/layer_view');
-        $items = $table->getItems();
-        $_children = $table->getChild();
-        $refineArray = array();
-        foreach ($_children as $index => $_child) {
-            if ($index == 'layer_state') {
-                // $itemArray = array();
-                foreach ($_child->getActiveFilters() as $item) {                                       
-                    $itemValues = array();
-                    $itemValues = $item->getValue();
-                    if(is_array($itemValues)){
-                        $itemValues = implode('-', $itemValues);                       
-                    }else{
-                        if($item->getFilter()->getRequestVar() == 'cat' && $itemValues == $data->category_id)
-                            continue;
-                    }
 
-                    if($item->getFilter()->getRequestVar() != null){
-                        $refineArray['layer_state'][] = array(
-                            'attribute' => $item->getFilter()->getRequestVar(),
-                            'title' => $item->getName(),
-                            'label' => (string) strip_tags($item->getLabel()), //filter request var and correlative name
-                            'value' => $itemValues,
-                        ); //value of each option
-                    }
+        $observerData['layerednavigation'] = $this->getItemsShopBy($table);
 
-
-                }
-                // $refineArray[] = $itemArray;
-            }elseif(get_class($_child) != "Mage_Catalog_Block_Layer_Filter_Price"){
-                $items = $_child->getItems();
-                $itemArray = array();
-                foreach ($items as $index => $item) {
-                    $filter = array();                                         
-                    if ($index == 0) {
-                        foreach ($items as $index => $item){
-                            $filter[] = array(
-                                'value' => $item->getValue(), //value of each option
-                                'label' => strip_tags($item->getLabel()), 
-                            );
-                        }
-
-                        if($item->getFilter()->getRequestVar() != null) {
-                            $refineArray['layer_filter'][] = array(
-                                'attribute' => $item->getFilter()->getRequestVar(),
-                                'title' => $item->getName(), //filter request var and correlative name
-                                'filter' => $filter,
-                            );
-                        }
-                    }                    
-                }
-            }
+        if(isset($data->brand) && $data->brand){
+            $search_data = Mage::getModel('connector/brand_customize')->getSearchData();
+            $observerData['search_box'] = $search_data['data'];
+            $shopbybrands = Mage::getModel('connector/brand_customize')->getBrandOnSideBar($data);
+            $observerData['brands'] = $shopbybrands;
         }
-        $observerData['layerednavigation'] = $refineArray;
+
         $productList = $this->changeProductList($data, $table);
         $observerData['data'] = $productList['data'];
         $observerData['message'] = $productList['message'];
+
         $observerData['other'][0]['product_id_array'] = $productList['other'];
         // $observerData['other'] = $productList['other'];
         $observerObject->setData($observerData);
@@ -123,6 +132,9 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
         $value = $observerObject->getRequest()->getParam('data');
         $params = $observerObject->getRequest()->getParams();
         $data = json_decode($value);
+        $categoryM = Mage::getModel('catalog/category')->load($data->category_id);
+        $m = $categoryM->getData();
+        if($categoryM->getData('include_in_menu') == 0) return;
 
         foreach ($data as $id => $param) {
             if ($id == 'category_id')
@@ -134,63 +146,13 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
         $filter = array();
         $filter = $data->filter;
         $params = json_decode(json_encode($filter), true);
-        // if(in_array($filter))
+        if (is_array($filter) || is_object($filter))
         foreach ($params as $key => $value) {
             $observerObject->getRequest()->setParam($key,$value);
         }
         $table = $observerObject->getLayout()->createBlock('catalog/layer_view');
-        $items = $table->getItems();
-        $_children = $table->getChild();
-        $refineArray = array();
-        foreach ($_children as $index => $_child) {
-            if ($index == 'layer_state') {
-                // $itemArray = array();
-                foreach ($_child->getActiveFilters() as $item) {                                       
-                    $itemValues = array();
-                    $itemValues = $item->getValue();
-                    if(is_array($itemValues)){
-                        $itemValues = implode('-', $itemValues);                       
-                    }else{
-                        if($item->getFilter()->getRequestVar() == 'cat' && $itemValues == $data->category_id)
-                            continue;
-                    }
 
-                    if($item->getFilter()->getRequestVar() != null) {
-                        $refineArray['layer_state'][] = array(
-                            'attribute' => $item->getFilter()->getRequestVar(),
-                            'title' => $item->getName(),
-                            'label' => (string)strip_tags($item->getLabel()), //filter request var and correlative name
-                            'value' => $itemValues,
-                        ); //value of each option
-                    }
-
-                }
-                // $refineArray[] = $itemArray;
-            }elseif(get_class($_child) != "Mage_Catalog_Block_Layer_Filter_Price"){
-                $items = $_child->getItems();
-                $itemArray = array();
-                foreach ($items as $index => $item) {
-                    $filter = array();                                         
-                    if ($index == 0) {
-                        foreach ($items as $index => $item){
-                            $filter[] = array(
-                                'value' => $item->getValue(), //value of each option
-                                'label' => strip_tags($item->getLabel()), 
-                            );
-                        }
-
-                        if($item->getFilter()->getRequestVar() != null) {
-                            $refineArray['layer_filter'][] = array(
-                                'attribute' => $item->getFilter()->getRequestVar(),
-                                'title' => $item->getName(), //filter request var and correlative name
-                                'filter' => $filter,
-                            );
-                        }
-                    }                    
-                }
-            }
-        }
-        $observerData['layerednavigation'] = $refineArray;
+        $observerData['layerednavigation'] = $this->getItemsShopBy($table);
         $productList = $this->changeProductList($data, $table);
         $observerData['data'] = $productList['data'];
         $observerData['message'] = $productList['message'];
@@ -217,63 +179,13 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
         $filter = array();
         $filter = $data->filter;
         $params = json_decode(json_encode($filter), true);
-        // if(in_array($filter))
+        if (is_array($filter) || is_object($filter))
         foreach ($params as $key => $value) {
             $observerObject->getRequest()->setParam($key,$value);
         }
+
         $table = $observerObject->getLayout()->createBlock('catalogsearch/layer');
-        $items = $table->getItems();
-        $_children = $table->getChild();
-        $refineArray = array();
-        foreach ($_children as $index => $_child) {
-            if ($index == 'layer_state') {
-                // $itemArray = array();
-                foreach ($_child->getActiveFilters() as $item) {                                       
-                    $itemValues = array();
-                    $itemValues = $item->getValue();
-                    if(is_array($itemValues)){
-                        $itemValues = implode('-', $itemValues);                       
-                    }else{
-                        if($item->getFilter()->getRequestVar() == 'cat' && $itemValues == $data->category_id)
-                            continue;
-                    }
-
-                    if($item->getFilter()->getRequestVar() != null) {
-                        $refineArray['layer_state'][] = array(
-                            'attribute' => $item->getFilter()->getRequestVar(),
-                            'title' => $item->getName(),
-                            'label' => (string)strip_tags($item->getLabel()), //filter request var and correlative name
-                            'value' => $itemValues,
-                        ); //value of each option
-                    }
-
-                }
-                // $refineArray[] = $itemArray;
-            }elseif(get_class($_child) != "Mage_Catalog_Block_Layer_Filter_Price"){
-                $items = $_child->getItems();
-                $itemArray = array();
-                foreach ($items as $index => $item) {
-                    $filter = array();                                         
-                    if ($index == 0) {
-                        foreach ($items as $index => $item){
-                            $filter[] = array(
-                                'value' => $item->getValue(), //value of each option
-                                'label' => strip_tags($item->getLabel()), 
-                            );
-                        }
-
-                        if($item->getFilter()->getRequestVar() != null) {
-                            $refineArray['layer_filter'][] = array(
-                                'attribute' => $item->getFilter()->getRequestVar(),
-                                'title' => $item->getName(), //filter request var and correlative name
-                                'filter' => $filter,
-                            );
-                        }
-                    }                    
-                }
-            }
-        }
-        $observerData['layerednavigation'] = $refineArray;
+        $observerData['layerednavigation'] = $this->getItemsShopBy($table);
         $productList = $this->changeProductList($data, $table);
         $observerData['data'] = $productList['data'];
         $observerData['message'] = $productList['message'];
@@ -293,15 +205,10 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
         $width = $data->width;
         $height = $data->height;
         $storeId = Mage::app()->getStore()->getId();
-        if ($categoryId) {
-            $productListBlock = Mage::getBlockSingleton('catalog/product_list');
-            $layerView = $table;
-            // $layerView->getLayer()->apply(Mage::app()->getRequest());
-            $layer = $layerView->getLayer();
-            $category = Mage::getModel('catalog/category')->load($categoryId);
-            $layerView->setCurrentCategory($category);
-            // $productListBlock->addModelTags($category);
-        }
+        $layerView = $table;
+        // $layerView->getLayer()->apply(Mage::app()->getRequest());
+        $layer = $layerView->getLayer();
+
         $productCollection = $layer->getProductCollection();
         $productCollection = $productCollection
                 ->setStoreId($storeId)
@@ -315,18 +222,37 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
         Mage::getSingleton('catalog/product_status')->addVisibleFilterToCollection($productCollection);
         Mage::getSingleton('catalog/product_visibility')->addVisibleInSearchFilterToCollection($productCollection);
         $productCollection->addUrlRewrite(0);
-        return $this->getProductList($productCollection, $offset, $limit, $width, $height);
+
+        $auction = null;
+
+        if(isset($data->auction) && $data->auction){
+            $auction = 1;
+        }
+
+        $brand = null;
+        if(isset($data->brand) && $data->brand){
+            $brand = $data->brand;
+        }
+        return $this->getProductList($productCollection, $offset, $limit, $width, $height, $auction, $brand);
     }
 
     /*
      *  change list product to array
      */
 
-    public function getProductList($collection, $offset, $limit, $width, $height) {
+    public function getProductList($collection, $offset, $limit, $width, $height, $auction=null, $brand=null) {
+        if($auction != null){
+            Mage::getModel('connector/auction_customize')->setListAuction($collection);
+        }
+
+        if($brand != null){
+            Mage::getModel('connector/brand_customize')->setProductByBrand($brand, $collection);
+        }
+
         $productList = array();
         $collection->setPageSize($offset + $limit);
         $product_total = $collection->getSize();
-  
+
         if ($offset > $product_total)
             return $this->statusError(array('No information'));
         $check_limit = 0;
@@ -360,6 +286,27 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
                 'manufacturer_name' => $manufacturer_name,
                 'is_show_price' => true,
             );
+
+            if($auction != null){
+                $modelAuction = Mage::getModel('auction/productauction');
+                $showprice = Mage::getStoreConfig('auction/general/show_price');
+                $delay = Mage::getStoreConfig('auction/general/delay_time');
+
+                $now_time = Mage::getModel('core/date')->timestamp(time());
+                $auction = $modelAuction->loadAuctionByProductId($product->getId());
+                $lastBid = $auction->getLastBid();
+                $currentPrice = $lastBid->getPrice() ? $lastBid->getPrice() : $auction->getInitPrice();
+                $end_time = strtotime($auction->getEndTime() . ' ' . $auction->getEndDate());
+                $bidder_name = $lastBid ? $lastBid->getBidderName() : Mage::helper('auction')->__('None');
+
+                $info_product['auction_is_show_price'] = $showprice;
+                $info_product['auction_is_delay'] = $delay;
+                $info_product['auction_now_time'] = $now_time;
+                $info_product['auction_end_time'] = $end_time;
+                $info_product['auction_current_price'] = $currentPrice;
+                $info_product['auction_bidder_name'] = $bidder_name;
+            }
+
             if ($prices) {
                 $info_product = array_merge($info_product, $prices);
             }
@@ -373,6 +320,7 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
             $data_change = $this->changeData($info_product, $event_name, $event_value);
             $productList[] = $data_change;
         }
+
         $information = '';
         if (count($productList)) {
             $information = $this->statusSuccess();
@@ -503,4 +451,28 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
         $information = $this->getListProduct($productCollection, $offset, $limit, $width, $height);
         return $information;
     }
+
+    public function getlink() {
+        $link = Mage::app()->getRequest()->getRouteName() .
+            Mage::app()->getRequest()->getControllerName() .
+            Mage::app()->getRequest()->getActionName() .
+            Mage::app()->getRequest()->getModuleName();
+        return $link;
+    }
+
+    public function catalog_product_collection_apply_limitations_after($observer) {
+        if ($this->getlink() != 'connectorcatalogget_all_productsconnector')
+            return $this;
+        $productCollection = $observer['collection'];
+        $pararm = Mage::app()->getRequest()->getParam('data');
+        $ob = json_decode($pararm);
+        if(is_object($ob) && isset($ob->auction)
+            && $ob->auction
+            && Mage::helper('core/data')->isModuleEnabled("Magestore_Auction")){
+            $productCollection->addFieldToFilter('entity_id', array('in' => $Ids = Mage::helper('auction')->getProductAuctionIds(Mage::app()->getStore()->getId())));
+        }
+        return $this;
+
+    }
+
 }

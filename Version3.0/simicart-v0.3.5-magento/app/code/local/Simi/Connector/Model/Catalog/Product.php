@@ -173,9 +173,8 @@ class Simi_Connector_Model_Catalog_Product extends Simi_Connector_Model_Catalog 
             $data_change = $this->changeData($info_product, $event_name, $event_value);
             $productList[] = $data_change;
         }
-        $information = '';
-        if (count($productList)) {
-            $information = $this->statusSuccess();
+        $information = $this->statusSuccess();
+        if (count($productList)) {            
             $information['message'] = array($product_total);
             $information['data'] = $productList;
             $_taxHelper = Mage::helper('tax');
@@ -192,12 +191,12 @@ class Simi_Connector_Model_Catalog_Product extends Simi_Connector_Model_Catalog 
                     )
                 );
             }           
-        } else {
-            $information = $this->statusSuccess();
+        } else {            
             $information['message'] = array($product_total);
             $information['data'] = $productList;
         }
 
+        $observerObject = new stdClass();
         $observerObject->information = $information;
         $observerObject->collection = $collection;
         Mage::dispatchEvent('simi_connector_get_product_list_after', array('object' => $observerObject));
