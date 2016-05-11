@@ -42,8 +42,13 @@ class Simi_Connector_Model_Device extends Simi_Connector_Model_Abstract {
 		$existed_device = $this->getCollection()->addFieldToFilter('device_token',$data->device_token)->getFirstItem();
 		if ($existed_device->getId())
 			$this->setId($existed_device->getId());
-        if($addresses)
-            $this->setData($addresses);      
+        if($addresses) {
+            $this->setData('address', $addresses['address']);
+			$this->setData('city', $addresses['city']);
+			$this->setData('state', $addresses['state']);
+			$this->setData('country', $addresses['country']);
+			$this->setData('zipcode', $addresses['zipcode']);
+		}		
         $this->setData('device_token', $data->device_token);
         $this->setData('plaform_id', $device_id);
         $this->setData('website_id', $website);   
