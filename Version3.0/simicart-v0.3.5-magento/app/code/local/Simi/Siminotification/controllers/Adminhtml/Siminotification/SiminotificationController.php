@@ -125,7 +125,8 @@ class Simi_Siminotification_Adminhtml_Siminotification_SiminotificationControlle
                 if($data['image_url'])
                     $data['image_url'] = Mage::getBaseUrl('media').$data['image_url'];
 
-                $data['notice_type'] = 0;
+                $data['notice_type'] = 0;				
+				$data['notice_id'] = $model->getId();
                 $list = getimagesize($data['image_url']);
                 $data['width'] = $list[0];
                 $data['height'] = $list[1];
@@ -194,7 +195,7 @@ class Simi_Siminotification_Adminhtml_Siminotification_SiminotificationControlle
 		$collectionDevice = $data['collection_device'];
 		foreach ($collectionDevice as $item) {
 			if (($data['website_id']== null) || (($item->getWebsiteId()) && ($data['website_id']== $item->getWebsiteId())))
-				$data['connector_notice_history'].= $item->getId().',';
+				$data['devices_pushed'].= $item->getId().',';
 		} 
         $history->setData($data);
         $history->save();
