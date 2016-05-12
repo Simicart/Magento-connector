@@ -85,7 +85,7 @@ class Simi_Connector_Model_Device extends Simi_Connector_Model_Abstract {
 							->addFieldToFilter('status','1')
 							->setOrder('history_id','desc');
 			foreach ($historyList as $historyItem) {
-				if ($historyItem->getData('devices_pushed')) {
+				if ($historyItem->getData('devices_pushed') && $historyItem->getData('notice_id')) {
 					if (in_array($existedDevice->getId(), explode(",", $historyItem->getData('devices_pushed')))){
 						$notificationList[] = array('id'=>$historyItem->getData('history_id'),
 							'notice_title'=>$historyItem->getData('notice_title'),
@@ -105,7 +105,9 @@ class Simi_Connector_Model_Device extends Simi_Connector_Model_Abstract {
 							'zipcode'=>$historyItem->getData('zipcode'),
 							'state'=>$historyItem->getData('state'),
 							'show_popup'=>$historyItem->getData('show_popup'),
-							'notice_type'=>$historyItem->getData('notice_type'),
+							'notice_type'=>$historyItem->getData('notice_type'),							
+							'created_time'=>$historyItem->getData('created_time'),
+							'notice_id'=>$historyItem->getData('notice_id'),
 							'status'=>$historyItem->getData('status'));
 					}
 				}
