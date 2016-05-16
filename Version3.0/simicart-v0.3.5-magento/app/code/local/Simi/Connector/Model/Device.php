@@ -87,6 +87,7 @@ class Simi_Connector_Model_Device extends Simi_Connector_Model_Abstract {
 			foreach ($historyList as $historyItem) {
 				if ($historyItem->getData('devices_pushed') && $historyItem->getData('notice_id')) {
 					if (in_array($existedDevice->getId(), explode(",", $historyItem->getData('devices_pushed')))){
+						$imagesize = getimagesize($historyItem->getData('image_url'));
 						$notificationList[] = array('id'=>$historyItem->getData('history_id'),
 							'notice_title'=>$historyItem->getData('notice_title'),
 							'notice_url'=>$historyItem->getData('notice_url'),
@@ -108,7 +109,10 @@ class Simi_Connector_Model_Device extends Simi_Connector_Model_Abstract {
 							'notice_type'=>$historyItem->getData('notice_type'),							
 							'created_time'=>$historyItem->getData('created_time'),
 							'notice_id'=>$historyItem->getData('notice_id'),
-							'status'=>$historyItem->getData('status'));
+							'status'=>$historyItem->getData('status'),
+							'width'=>$imagesize[0],
+							'height'=>$imagesize[1])
+							;
 					}
 				}
 			}		
@@ -128,6 +132,7 @@ class Simi_Connector_Model_Device extends Simi_Connector_Model_Abstract {
             }
         }
     }
+		
 
     public function getAddress($lat,$lng){
         $url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng='.trim($lat).','.trim($lng).'&sensor=false';
