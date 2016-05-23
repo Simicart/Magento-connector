@@ -222,6 +222,6 @@ class Simi_Spotproduct_Adminhtml_SpotproductController extends Mage_Adminhtml_Co
 	}
 	
 	protected function _isAllowed(){
-		return Mage::getSingleton('admin/session')->isAllowed('spotproduct');
+		return Mage::getSingleton('admin/session')->isAllowed('connector');
 	}
 }

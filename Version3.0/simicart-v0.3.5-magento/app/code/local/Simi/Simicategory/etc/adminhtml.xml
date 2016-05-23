@@ -55,21 +55,21 @@
                         </children>
                     </simicategory-->
                     <connector>
-                        <children>
-                            <simi_theme>
-                                <children>
-                                    <default_theme>
-                                        <children>
-                                            <simicategory module="simicategory" translate="title">
-                                                <title>Home Category</title>
-                                                <sort_order>50</sort_order>
-                                            </simicategory>
-                                        </children>
-                                    </default_theme>
-                                </children>
-                            </simi_theme>
-                        </children>
-                    </connector>
+            <children>
+                <simi_theme>
+                    <children>
+                        <default_theme>
+                            <children>
+                                <simicategory module="simicategory" translate="title">
+                                    <title>Home Category</title>
+                                    <sort_order>50</sort_order>
+                                </simicategory>
+                            </children>
+                        </default_theme>
+                    </children>
+                </simi_theme>
+            </children>
+        </connector>
                 </children>
             </admin>
         </resources>
