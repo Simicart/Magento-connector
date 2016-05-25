@@ -28,13 +28,60 @@
 </script>
 <?php else: ?>
 <script type="text/javascript">
+    function getCookie(c_name) {
+        if (document.cookie.length > 0) {
+            c_start = document.cookie.indexOf(c_name + "=");
+            if (c_start != -1) {
+                c_start = c_start + c_name.length + 1;
+                c_end = document.cookie.indexOf(";", c_start);
+                if (c_end == -1) {
+                    c_end = document.cookie.length;
+                }
+                return unescape(document.cookie.substring(c_start, c_end));
+            }
+        }
+        return "";
+    }
+
     document.observe("dom:loaded", function() {
+        var isMobile = false;
+        var url = '';
+        if ( navigator.userAgent.match(/Android/i)){
+            isMobile = true;
+            url =  '<?php echo Mage::getStoreConfig("simipopup/general/link_android"); ?>';
+        }
+        if (navigator.userAgent.match(/iPhone/i)){
+            isMobile = true;
+            url =  '<?php echo Mage::getStoreConfig("simipopup/general/link_ipad"); ?>';
+        }
+        if (navigator.userAgent.match(/iPad/i)){
+            isMobile = true;
+            url =  '<?php echo Mage::getStoreConfig("simipopup/general/link_alert"); ?>';
+        }
         // initially hide all containers for tab content
-        var r=confirm("<?php echo $message;?>");
-        if (r==true)
-        {
-            setLocation('<?php echo $url; ?>');
-        }       
+        if (getCookie('SessionSimiPopup') != '1')
+            if (isMobile) {
+                var r=confirm("<?php echo $message;?>");
+                if (r==true)
+                {
+                    var name = 'SessionSimiPopup';
+                    var value = '1';
+                    var days  = 1;
+                    var createCookie = function(name, value, days) {
+                        var expires;
+                        if (days) {
+                            var date = new Date();
+                            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                            expires = "; expires=" + date.toGMTString();
+                        }
+                        else {
+                            expires = "";
+                        }
+                        document.cookie = name + "=" + value + expires + "; path=/";
+                    }
+                    setLocation(url);
+                }       
+            }
     });            
 
 </script>
