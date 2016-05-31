@@ -32,5 +32,4 @@ class Simi_Popup_Block_Popup extends Mage_Core_Block_Template {
     public function isMobile() {
 		$this->setTemplate('popup/popup.phtml');
     }
-
 }
