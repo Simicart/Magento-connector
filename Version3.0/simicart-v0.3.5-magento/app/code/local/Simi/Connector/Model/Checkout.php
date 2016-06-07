@@ -401,4 +401,27 @@ class Simi_Connector_Model_Checkout extends Simi_Connector_Model_Abstract {
             return $information;
         }
     }
+	
+	public function cancelOrder($order_id){
+
+        try{
+            $information = $this->statusSuccess();
+            $order=Mage::getModel('sales/order')->loadByIncrementId($order_id);
+            // Zend_Debug::dump($order->getData());die;
+            if(!$order->getId()){
+                $information = $this->statusError(array(Mage::helper('connector')->__("Order doesn't exist.")));
+            }
+            $order->cancel();
+            $order->setState(Mage_Sales_Model_Order::STATE_CANCELED, true);
+            $order->save();
+        }catch(Exception $e){
+            if (is_array($e->getMessage())) {
+                $information = $this->statusError($e->getMessage());
+            } else {
+                $information = $this->statusError(array($e->getMessage()));
+            }
+
+        }
+        return $information;
+    }
 }
