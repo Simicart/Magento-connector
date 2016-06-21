@@ -12,20 +12,26 @@ class Simi_Simicategory_Model_Simicategory extends Simi_Connector_Model_Abstract
 		try{
 			$collection = $this->getCollection();
 			foreach($collection as $item){
-				if($item->getStatus() == 1){					
-				$_cat = Mage::getModel('catalog/category')->load($item->getCategoryId());
-				if($_cat->getName())
-					$catname = $_cat->getName();
-				else 
-					$catname = $item->getSimicategoryName();
-					$info = array(
-						'category_id' => $item->getCategoryId(),
-						'category_image' => $item->getSimicategoryFilename(),
-						'category_name' => $catname,
-					);
-					$data[] = $info;
+				if($item->getStatus() == 1){
+					$category=Mage::getModel('catalog/category')->load($item->getCategoryId());
+					if(!$category->hasChildren()){
+						$info = array(
+							'category_id' => $item->getCategoryId(),
+							'category_image' => $item->getSimicategoryFilename(),
+							'has_child' => 'NO',
+						);
+					}else{
+						$info = array(
+							'category_id' => $item->getCategoryId(),
+							'category_image' => $item->getSimicategoryFilename(),
+							'category_name' => $item->getSimicategoryName(),
+							'has_child' => 'YES',
+						);
 					}
+					
+					$data[] = $info;
 				}
+			}
 
 			$information = $this->statusSuccess();
 	        $information['data'] = $data;
