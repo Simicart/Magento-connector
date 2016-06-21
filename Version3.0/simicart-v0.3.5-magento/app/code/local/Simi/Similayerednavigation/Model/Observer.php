@@ -226,6 +226,7 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
 		}else{
            Mage::getSingleton('catalog/product_visibility')->addVisibleInCatalogFilterToCollection($productCollection);
 		}
+		$productCollection->addUrlRewrite(0);
 
         $auction = null;
 
