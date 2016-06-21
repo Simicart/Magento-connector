@@ -186,14 +186,14 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
 
         $table = $observerObject->getLayout()->createBlock('catalogsearch/layer');
         $observerData['layerednavigation'] = $this->getItemsShopBy($table);
-        $productList = $this->changeProductList($data, $table);
+        $productList = $this->changeProductList($data, $table,true);
         $observerData['data'] = $productList['data'];
         $observerData['message'] = $productList['message'];
         // $observerData['other'] = $productList['other'];
         $observerObject->setData($observerData);
     }
 
-    public function changeProductList($data, $table){
+    public function changeProductList($data, $table, $is_search=false){
         $categoryId = $data->category_id;
         if($categoryId < 0 || $categoryId == NULL){
             $categoryId = Mage::app()->getWebsite()->getDefaultStore()->getRootCategoryId();
@@ -220,8 +220,12 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
         }        
 
         Mage::getSingleton('catalog/product_status')->addVisibleFilterToCollection($productCollection);
-        Mage::getSingleton('catalog/product_visibility')->addVisibleInSearchFilterToCollection($productCollection);
-        $productCollection->addUrlRewrite(0);
+        
+		if($is_search){
+           Mage::getSingleton('catalog/product_visibility')->addVisibleInSearchFilterToCollection($productCollection);
+		}else{
+           Mage::getSingleton('catalog/product_visibility')->addVisibleInCatalogFilterToCollection($productCollection);
+		}
 
         $auction = null;
 
