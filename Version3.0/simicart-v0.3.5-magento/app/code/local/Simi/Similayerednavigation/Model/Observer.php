@@ -89,8 +89,12 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
         $value = $observerObject->getRequest()->getParam('data');
         $params = $observerObject->getRequest()->getParams();
         $data = json_decode($value);
-
-        foreach ($data as $id => $param) {
+		
+		$categoryM = Mage::getModel('catalog/category')->load($data->category_id);
+        $m = $categoryM->getData();
+        if($categoryM->getData('include_in_menu') == 0) return;
+       
+	   foreach ($data as $id => $param) {
             if ($id == 'category_id')
                 $id = 'cat';
             if($id != 'filter')
@@ -99,6 +103,9 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
         $observerObject->getRequest()->setParams($params);
         $filter = array();
         $filter = $data->filter;
+		
+		
+		
         $params = json_decode(json_encode($filter), true);
         if (is_array($filter) || is_object($filter))
         foreach ($params as $key => $value) {
