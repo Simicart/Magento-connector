@@ -351,11 +351,29 @@ class Simi_Connector_Model_Checkout_Payment extends Simi_Connector_Model_Checkou
     }
 
     //hainh
-    public function saveCheckoutPaymentMethod($data) {
+     public function saveCheckoutPaymentMethod($data) {
 
         try {
             $method = array('method' => strtolower($data->payment_method));
-
+			if (isset($data->card_type) && $data->card_type) {
+				if (isset($data->cc_id) && $data->cc_id) {
+					$method = array('method' => strtolower($data->payment_method),
+						'cc_type' => $data->card_type,
+						'cc_number' => $data->card_number,
+						'cc_exp_month' => $data->expired_month,
+						'cc_exp_year' => $data->expired_year,
+						'cc_cid' => $data->cc_id,
+					);
+				} else {
+					$method = array('method' => strtolower($data->payment_method),
+						'cc_type' => $data->card_type,
+						'cc_number' => $data->card_number,
+						'cc_exp_month' => $data->expired_month,
+						'cc_exp_year' => $data->expired_year,
+					);
+				}
+			}	
+			
             $this->_getOnepage()->savePayment($method);
             $this->_getOnepage()->getQuote()->collectTotals()->save();
             $total = $this->_getOnepage()->getQuote()->getTotals();
