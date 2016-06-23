@@ -99,7 +99,6 @@ class Simi_Connector_IndexController extends Mage_Core_Controller_Front_Action {
         $installer->startSetup();
 		$installer->run("
 
-			DROP TABLE IF EXISTS {$setup->getTable('connector_design')};
 			DROP TABLE IF EXISTS {$setup->getTable('connector_device')};
 			DROP TABLE IF EXISTS {$setup->getTable('connector_banner')};
 			DROP TABLE IF EXISTS {$setup->getTable('connector_payment')};
@@ -151,14 +150,6 @@ class Simi_Connector_IndexController extends Mage_Core_Controller_Front_Action {
 			  PRIMARY KEY (`plugin_id`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
-			CREATE TABLE {$setup->getTable('connector_design')} (
-			  `design_id` int(11) unsigned NOT NULL auto_increment,
-			  `theme_color` varchar(255) NULL default '',
-			  `theme_logo` varchar(255) NULL default '',
-			  `device_id` int (11) NULL,
-			  `website_id` int (11),
-			  PRIMARY KEY (`design_id`)
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 			CREATE TABLE {$setup->getTable('connector_device')} (
 			  `device_id` int(11) unsigned NOT NULL auto_increment,

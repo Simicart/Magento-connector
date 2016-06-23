@@ -127,9 +127,6 @@
                     <payment>
                         <table>connector_payment</table>
                     </payment>
-                    <design>
-                        <table>connector_design</table>
-                    </design>
                     <device>
                         <table>connector_device</table>
                     </device>
