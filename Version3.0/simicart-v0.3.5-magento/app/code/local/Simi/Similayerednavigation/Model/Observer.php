@@ -92,7 +92,7 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
 		
 		$categoryM = Mage::getModel('catalog/category')->load($data->category_id);
         $m = $categoryM->getData();
-        if($categoryM->getData('include_in_menu') == 0) return;
+        if($categoryM->getData('is_anchor') == 0) return;
        
 	   foreach ($data as $id => $param) {
             if ($id == 'category_id')
