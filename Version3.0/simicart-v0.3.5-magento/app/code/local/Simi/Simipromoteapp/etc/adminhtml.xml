@@ -42,20 +42,24 @@
 							</config>
 						</children>
 					</system>
-					<simipromoteapp module="simipromoteapp" translate="title">
-						<title>Simipromoteapp</title>
-						<sort_order>71</sort_order>               
-						<children>
-							<simipromoteapp module="simipromoteapp" translate="title">
-								<title>Manage Items</title>
-								<sort_order>0</sort_order>
-							</simipromoteapp>
-							<settings module="simipromoteapp" translate="title">
-								<title>Settings</title>
-								<sort_order>1000</sort_order>
-							</settings>
-						</children>
-					</simipromoteapp>
+					<connector>
+			<children>
+				<simipromoteapp module="simipromoteapp" translate="title">
+					<title>Promote Apps (New)</title>
+					<sort_order>71</sort_order>
+					<children>
+						<simipromoteapp module="simipromoteapp" translate="title">
+							<title>Reports</title>
+							<sort_order>0</sort_order>
+						</simipromoteapp>
+						<settings module="simipromoteapp" translate="title">
+							<title>Settings</title>
+							<sort_order>1000</sort_order>
+						</settings>
+					</children>
+				</simipromoteapp>
+			</children>
+		</connector>
 				</children>
 			</admin>
 		</resources>
