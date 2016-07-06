@@ -193,10 +193,12 @@ class Simi_Siminotification_Adminhtml_Siminotification_SiminotificationControlle
         else
             $data['status'] = 1;
 		$collectionDevice = $data['collection_device'];
+		$pusshedArray = array();
 		foreach ($collectionDevice as $item) {
-			if (($data['website_id']== null) || (($item->getWebsiteId()) && ($data['website_id']== $item->getWebsiteId())))
-				$data['devices_pushed'].= $item->getId().',';
+			if (($data['website_id']== null) || ($item['website_id'] && ($data['website_id']== $item['website_id'])))
+				$pusshedArray[] = $item['device_id'];
 		} 
+		$data['devices_pushed']= implode(",",$pusshedArray);
         $history->setData($data);
         $history->save();
         return $trans;
@@ -254,7 +256,7 @@ class Simi_Siminotification_Adminhtml_Siminotification_SiminotificationControlle
 			case '2': $sendLive = 1; $sendTest = 0; $collectionDevice->addFieldToFilter('is_demo',0); break;
 			default: $sendLive = 1; $sendTest = 1; 
 		}
-		$data['collection_device'] = $collectionDevice;
+		$data['collection_device'] = $collectionDevice->getData();
 		
         if ((int) $data['device_id'] != 0) {
             if ((int) $data['device_id'] == 2) {
@@ -329,31 +331,49 @@ class Simi_Siminotification_Adminhtml_Siminotification_SiminotificationControlle
 			}	
 		}
 		else {
-			$ctx = stream_context_create();
-			stream_context_set_option($ctx, 'ssl', 'local_cert', $ch);
-			//$fp = stream_socket_client('ssl://gateway.sandbox.push.apple.com:2195', $err, $errstr, 60, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $ctx);
-			$fp = stream_socket_client('ssl://gateway.push.apple.com:2195', $err, $errstr, 60, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $ctx);
-			if (!$fp) {
-			 Mage::getSingleton('adminhtml/session')->addError("Failed to connect:" . $err . $errstr . PHP_EOL . "(IOS)");
-				return;
-			}		
+			$i = 0;		
+			$tokenArray = array();			
 			foreach ($collectionDevice as $item) {
-				$deviceToken = $item->getDeviceToken();
-				$msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
-				// Send it to the server
-				$result = fwrite($fp, $msg, strlen($msg));
-				if (!$result) {
-					Mage::getSingleton('adminhtml/session')->addError('Message not delivered (IOS)' . PHP_EOL);
-					return false;
+				if ($i == 100) {
+					$this->repeatSendiOS($tokenArray, $payload, $ch, $dir);					
+					$i =0;
+					$tokenArray = array();					
 				}
+				if (strlen ($item->getDeviceToken())<70)
+					$tokenArray[] = $item->getDeviceToken();				
+				$i++;
 				$totalDevice++;
-			}			
-			fclose($fp);
+			}
+			if ($i<100)
+				$this->repeatSendiOS($tokenArray, $payload, $ch, $dir);
 		}
 		Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Message successfully delivered to %s devices (IOS)', $totalDevice));
 		return true;
 			
     }
+	
+	public function repeatSendiOS($tokenArray, $payload, $ch, $dir){	
+		$ctx = stream_context_create();
+		stream_context_set_option($ctx, 'ssl', 'local_cert', $ch);
+		$fp = stream_socket_client('ssl://gateway.push.apple.com:2195', $err, $errstr, 60, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $ctx);
+		if (!$fp) {
+		 Mage::getSingleton('adminhtml/session')->addError("Failed to connect:" . $err . $errstr . PHP_EOL . "(IOS)");
+			return;
+		}		
+		foreach ($tokenArray as $deviceToken) {
+			$msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
+			// Send it to the server
+			$result = fwrite($fp, $msg, strlen($msg));
+			if (!$result) {
+				Mage::getSingleton('adminhtml/session')->addError('Message not delivered (IOS)' . PHP_EOL);
+				return false;
+			}
+		}			
+		fclose($fp);
+	}
+	
+	
+	
 
     public function repeatSendAnddroid($total, $collectionDevice, $message){
         $size = $total;

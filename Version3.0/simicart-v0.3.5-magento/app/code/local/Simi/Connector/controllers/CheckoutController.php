@@ -111,4 +111,11 @@ class Simi_Connector_CheckoutController extends Simi_Connector_Controller_Action
         $information = Mage::getModel('connector/checkout_payment')->saveCheckoutPaymentMethod($data);
         $this->_printDataJson($information);
     }
+	
+	public function cancel_orderAction() {
+		$data = $this->getData();
+		$oder_id=$data->order_id;
+		$information = Mage::getModel('connector/checkout')->cancelOrder($oder_id);
+		$this->_printDataJson($information);
+	}
 }

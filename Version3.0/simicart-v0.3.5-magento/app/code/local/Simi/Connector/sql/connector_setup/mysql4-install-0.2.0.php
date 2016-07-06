@@ -22,7 +22,6 @@ $installer->startSetup();
  */
 $installer->run("
 
-DROP TABLE IF EXISTS {$this->getTable('connector_design')};
 DROP TABLE IF EXISTS {$this->getTable('connector_device')};
 DROP TABLE IF EXISTS {$this->getTable('connector_banner')};
 DROP TABLE IF EXISTS {$this->getTable('connector_payment')};
@@ -74,14 +73,6 @@ CREATE TABLE {$this->getTable('connector_plugin')} (
   PRIMARY KEY (`plugin_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
-CREATE TABLE {$this->getTable('connector_design')} (
-  `design_id` int(11) unsigned NOT NULL auto_increment,
-  `theme_color` varchar(255) NULL default '',
-  `theme_logo` varchar(255) NULL default '',
-  `device_id` int (11) NULL,
-  `website_id` int (11),
-  PRIMARY KEY (`design_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE {$this->getTable('connector_device')} (
   `device_id` int(11) unsigned NOT NULL auto_increment,
@@ -112,7 +103,6 @@ CREATE TABLE {$this->getTable('connector_cms')} (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ");
-Mage::helper('connector')->importDesgin();
 Mage::helper('connector')->saveDataApp();
 $installer->endSetup();
 

@@ -234,7 +234,7 @@ class Simi_Connector_Helper_Bundle_Tax extends Mage_Core_Helper_Abstract {
                         }
                     }
                 } else {
-                    $data["excl_tax"] = abs($_coreHelper->currency($_minimalPriceTax));
+                    $data["excl_tax"] = abs($_coreHelper->currency($_minimalPriceTax,false,false));
                     if ($_weeeTaxAmount && $_product->getPriceType() == 1 && $_weeeHelper->typeOfDisplay($_product, array(2, 1, 4))) {
                         $_weeeSeparator = '';
                         foreach ($_weeeTaxAttributes as $_weeeTaxAttribute) {

@@ -13,11 +13,22 @@ class Simi_Simicategory_Model_Simicategory extends Simi_Connector_Model_Abstract
 			$collection = $this->getCollection();
 			foreach($collection as $item){
 				if($item->getStatus() == 1){
-					$info = array(
-						'category_id' => $item->getCategoryId(),
-						'category_image' => $item->getSimicategoryFilename(),
-						'category_name' => $item->getSimicategoryName(),
-					);
+					$category=Mage::getModel('catalog/category')->load($item->getCategoryId());
+					if(!$category->hasChildren()){
+						$info = array(
+							'category_id' => $item->getCategoryId(),
+							'category_image' => $item->getSimicategoryFilename(),
+							'has_child' => 'NO',
+						);
+					}else{
+						$info = array(
+							'category_id' => $item->getCategoryId(),
+							'category_image' => $item->getSimicategoryFilename(),
+							'category_name' => $item->getSimicategoryName(),
+							'has_child' => 'YES',
+						);
+					}
+					
 					$data[] = $info;
 				}
 			}

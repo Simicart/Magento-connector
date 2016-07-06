@@ -32,11 +32,7 @@ class Simi_Connector_Model_Key extends Mage_Core_Model_Abstract {
 		// Zend_debug::dump($collection->getData());die();
         if (!$app->getFirstItem()->getId()) {
             $data = Mage::helper('connector')->getDataDesgin();
-            foreach ($data as $item) {
-                $model_d = Mage::getModel('connector/design');
-                $model_d->setData($item);
-                $model_d->setWebsiteId($webId);
-                $model_d->save();
+            foreach ($data as $item) {               
                 $model_a = Mage::getModel('connector/app');
                 $model_a->setData($item);
                 $model_a->setWebsiteId($webId);

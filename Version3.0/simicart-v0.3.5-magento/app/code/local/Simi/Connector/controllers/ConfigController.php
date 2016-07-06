@@ -29,11 +29,24 @@ class Simi_Connector_ConfigController extends Simi_Connector_Controller_Action {
     public function get_store_viewAction() {
         $data = $this->getData();
         if (isset($data->store_id) && $data->store_id) {
-            Mage::app()->getCookie()->set(Mage_Core_Model_Store::COOKIE_NAME, Mage::app()->getStore($data->store_id)->getCode(), TRUE);
+			$all_stores= Mage::getModel('connector/switch')->getStores();
+			$all_ids=array();
+			foreach($all_stores['data'] as $store){
+				$all_ids[]=$store['store_id'];
+			}
+			if(!in_array($data->store_id,$all_ids)){
+				$store_id=Mage::app()
+							->getWebsite()
+							->getDefaultGroup()
+							->getDefaultStoreId();
+			}else{
+				$store_id=$data->store_id;
+			}
+            Mage::app()->getCookie()->set(Mage_Core_Model_Store::COOKIE_NAME, Mage::app()->getStore($store_id)->getCode(), TRUE);
             Mage::app()->setCurrentStore(
-                    Mage::app()->getStore($data->store_id)->getCode()
+                    Mage::app()->getStore($store_id)->getCode()
             );
-            Mage::getSingleton('core/locale')->emulate($data->store_id);
+            Mage::getSingleton('core/locale')->emulate($store_id);
         }
         $information = Mage::getModel('connector/config_app')->getConfigApp();
         $this->_printDataJson($information);

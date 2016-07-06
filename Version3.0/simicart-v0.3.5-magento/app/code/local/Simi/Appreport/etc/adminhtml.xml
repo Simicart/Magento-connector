@@ -48,17 +48,17 @@
                         </children>
                     </system>
                     <connector>
-                        <children>
-                            <core>
-                                <children>
-                                    <simitransactions module="appreport" translate="title">
-                                        <title>App Transactions</title>
-                                        <sort_order>200</sort_order>
-                                    </simitransactions>
-                                </children>
-                            </core>
-                        </children>
-                    </connector>
+            <children>
+                <core>
+                    <children>
+                        <simitransactions module="appreport" translate="title">
+                            <title>App Transactions</title>
+                            <sort_order>200</sort_order>
+                        </simitransactions>
+                    </children>
+                </core>
+            </children>
+        </connector>
                 </children>
             </admin>
         </resources>
