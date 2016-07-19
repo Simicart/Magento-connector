@@ -17,7 +17,8 @@ class Simi_Simicategory_Model_Simicategory extends Simi_Connector_Model_Abstract
 					if(!$category->hasChildren()){
 						$info = array(
 							'category_id' => $item->getCategoryId(),
-							'category_image' => $item->getSimicategoryFilename(),
+							'category_image' => $item->getSimicategoryFilename(),							
+							'category_name' => $item->getSimicategoryName(),
 							'has_child' => 'NO',
 						);
 					}else{
