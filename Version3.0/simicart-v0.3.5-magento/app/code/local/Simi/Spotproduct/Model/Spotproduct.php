@@ -147,21 +147,11 @@ class Simi_Spotproduct_Model_Spotproduct extends Simi_Connector_Model_Abstract {
 				$productlist[] = $products;
 			}
 			
-			if ($style_most == 1){                   
-                $file = Mage::getBaseDir('code').'/local/Simi/Spotproduct/controllers/spotData.json';
-                $json = json_decode(file_get_contents($file), true);
-                if($json &&$json['information']){
-                        $products = $json['information'];
-                }
-                else {
-                        $productCollection = $this->getMostviewProduct();
-                        $title  = Mage::helper("core")->__("Most View");                        
-                        $key = "most_view";
-                        $products = $this->getProductList($productCollection, $title, $key);
-                        $jsontoEncode = array();
-                        $jsontoEncode['information'] = $products;
-                        file_put_contents($file, json_encode($jsontoEncode));
-                }
+			if ($style_most == 1){  
+			    $productCollection = $this->getMostviewProduct();
+                $title  = Mage::helper("core")->__("Most View");                        
+                $key = "most_view";
+                $products = $this->getProductList($productCollection, $title, $key);
                 $productlist[] = $products;
             }
 			
