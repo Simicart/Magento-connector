@@ -192,7 +192,7 @@ class Simi_Siminotification_Adminhtml_Siminotification_SiminotificationControlle
             $data['status'] = 0;
         else
             $data['status'] = 1;
-		$collectionDevice = $data['collection_device'];
+		$collectionDevice = $data['collection_device']; 
 		$pusshedArray = array();
 		foreach ($collectionDevice as $item) {
 			if (($data['website_id']== null) || ($item['website_id'] && ($data['website_id']== $item['website_id'])))
@@ -256,19 +256,21 @@ class Simi_Siminotification_Adminhtml_Siminotification_SiminotificationControlle
 			case '2': $sendLive = 1; $sendTest = 0; $collectionDevice->addFieldToFilter('is_demo',0); break;
 			default: $sendLive = 1; $sendTest = 1; 
 		}
-		$data['collection_device'] = $collectionDevice->getData();
 		
         if ((int) $data['device_id'] != 0) {
             if ((int) $data['device_id'] == 2) {
                 //send android
                 $collectionDevice->addFieldToFilter('plaform_id', array('eq' => 3));
+				$data['collection_device'] = $collectionDevice->getData(); 
                 return $this->sendAndroid($collectionDevice, $data);
             } else {
                 //send IOS
                 $collectionDevice->addFieldToFilter('plaform_id', array('neq' => 3));
+				$data['collection_device'] = $collectionDevice->getData(); 
                 return $this->sendIOS($collectionDevice, $data);
             }
         } else {
+			$data['collection_device'] = $collectionDevice->getData(); 
             //send all
             $collection = $collectionDevice->addFieldToFilter('website_id', array('eq' => $website));                       
             $collectionAndroid = $collectionDevice2->addFieldToFilter('website_id', array('eq' => $website));   
@@ -277,6 +279,7 @@ class Simi_Siminotification_Adminhtml_Siminotification_SiminotificationControlle
             $collectionAndroid->addFieldToFilter('plaform_id', array('eq' => 3));
           
             $resultIOS = $this->sendIOS($collection, $data);
+			
             $resultAndroid = $this->sendAndroid($collectionAndroid, $data);
             if ($resultIOS || $resultAndroid)
                 return true;
@@ -339,8 +342,11 @@ class Simi_Siminotification_Adminhtml_Siminotification_SiminotificationControlle
 					$i =0;
 					$tokenArray = array();					
 				}
-				if (strlen ($item->getDeviceToken())<70)
-					$tokenArray[] = $item->getDeviceToken();				
+				if (strlen ($item->getDeviceToken())<70) {
+					$tokenArray[] = $item->getDeviceToken();	
+				}					
+				else 
+					continue;
 				$i++;
 				$totalDevice++;
 			}
