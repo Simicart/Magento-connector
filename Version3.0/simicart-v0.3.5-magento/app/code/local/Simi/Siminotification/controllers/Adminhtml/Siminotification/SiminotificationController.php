@@ -261,16 +261,17 @@ class Simi_Siminotification_Adminhtml_Siminotification_SiminotificationControlle
             if ((int) $data['device_id'] == 2) {
                 //send android
                 $collectionDevice->addFieldToFilter('plaform_id', array('eq' => 3));
+				$result = $this->sendAndroid($collectionDevice, $data);
 				$data['collection_device'] = $collectionDevice->getData(); 
-                return $this->sendAndroid($collectionDevice, $data);
+				return $result;                
             } else {
                 //send IOS
                 $collectionDevice->addFieldToFilter('plaform_id', array('neq' => 3));
+				$result = $this->sendIOS($collectionDevice, $data);
 				$data['collection_device'] = $collectionDevice->getData(); 
-                return $this->sendIOS($collectionDevice, $data);
+				return $result;                
             }
         } else {
-			$data['collection_device'] = $collectionDevice->getData(); 
             //send all
             $collection = $collectionDevice->addFieldToFilter('website_id', array('eq' => $website));                       
             $collectionAndroid = $collectionDevice2->addFieldToFilter('website_id', array('eq' => $website));   
@@ -280,7 +281,8 @@ class Simi_Siminotification_Adminhtml_Siminotification_SiminotificationControlle
           
             $resultIOS = $this->sendIOS($collection, $data);
 			
-            $resultAndroid = $this->sendAndroid($collectionAndroid, $data);
+            $resultAndroid = $this->sendAndroid($collectionAndroid, $data);			
+			$data['collection_device'] = $collectionDevice->getData(); 
             if ($resultIOS || $resultAndroid)
                 return true;
             else

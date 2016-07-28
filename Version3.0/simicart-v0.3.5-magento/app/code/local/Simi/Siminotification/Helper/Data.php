@@ -125,8 +125,6 @@ class Simi_Siminotification_Helper_Data extends Mage_Core_Helper_Abstract
 			$collectionDevice2->addFieldToFilter('country', array('like' => '%' . $data['country'] . '%'));
         }
 		
-		$data['collection_device'] = $collectionDevice->getData();     
-		
 		$collectionDevice->addFieldToFilter('is_demo','0');
 		if ((int) $data['device_id'] != 0) {
             $collectionDevice->addFieldToFilter('website_id', array('eq' => $website));
