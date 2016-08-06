@@ -598,7 +598,7 @@ class Simi_Connector_Model_Customer extends Simi_Connector_Model_Abstract {
                 ->setOrder('entity_id', 'DESC');
 
         if ($offset > count($orders))
-            return null;
+            return $this->statusError(array(Mage::helper("connector")->__('Can not get any more order!')));
         $check_limit = 0;
         $check_offset = 0;
         foreach ($orders as $order) {
