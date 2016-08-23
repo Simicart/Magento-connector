@@ -475,7 +475,8 @@ class Simi_Connector_Model_Checkout_Cart extends Simi_Connector_Model_Abstract {
                 }
             }           
             $list[] = array(
-                'cart_item_id' => $item->getId(),
+                'cart_item_id' => $item->getId(),				
+                'stock_status' => $product->isSaleable(),
                 'product_id' => $product->getId(),
                 'product_name' => $product->getName(),              
                 'product_price' => Mage::app()->getStore()->convertPrice($item->getPrice(), false),                

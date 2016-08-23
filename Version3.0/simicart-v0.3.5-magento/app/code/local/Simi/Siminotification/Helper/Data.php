@@ -103,50 +103,62 @@ class Simi_Siminotification_Helper_Data extends Mage_Core_Helper_Abstract
         }
         $website = $data['website_id'];
         $collectionDevice = Mage::getModel('connector/device')->getCollection();
-		$collectionDevice2 = Mage::getModel('connector/device')->getCollection();
+        $collectionDevice2 = Mage::getModel('connector/device')->getCollection();
+
         if ($data['country'] != "0") {
             $country_id = trim($data['country']);
             $collectionDevice->addFieldToFilter('country', array('like' => '%' . $data['country'] . '%'));
-			$collectionDevice2->addFieldToFilter('country', array('like' => '%' . $data['country'] . '%'));
+            $collectionDevice2->addFieldToFilter('country', array('like' => '%' . $data['country'] . '%'));
         }
         if (isset($data['state']) && ($data['state'] != null)) {
             $city = trim($city);
             $collectionDevice->addFieldToFilter('state', array('like' => '%' . $data['state'] . '%'));
-			$collectionDevice2->addFieldToFilter('country', array('like' => '%' . $data['country'] . '%'));
+            $collectionDevice2->addFieldToFilter('state', array('like' => '%' . $data['state'] . '%'));
         }
-        if (isset($data['city']) && ($data['city'] != null)) {
-            $city = trim($city);
+        if (isset($data['address']) && ($data['address'] != null)) {           
+            $collectionDevice->addFieldToFilter('address', $data['address']);
+            $collectionDevice2->addFieldToFilter('address', $data['address']);
+        }
+        if (isset($data['city']) && ($data['city'] != null)) {            
             $collectionDevice->addFieldToFilter('city', array('like' => '%' . $data['city'] . '%'));
-			$collectionDevice2->addFieldToFilter('country', array('like' => '%' . $data['country'] . '%'));
+            $collectionDevice2->addFieldToFilter('city', array('like' => '%' . $data['city'] . '%'));
         }
-        if (isset($data['zipcode']) && ($data['zipcode'] != null)) {
-            $city = trim($city);
+        if (isset($data['zipcode']) && ($data['zipcode'] != null)) {            
             $collectionDevice->addFieldToFilter('zipcode', array('like' => '%' . $data['zipcode'] . '%'));
-			$collectionDevice2->addFieldToFilter('country', array('like' => '%' . $data['country'] . '%'));
+            $collectionDevice2->addFieldToFilter('zipcode', array('like' => '%' . $data['zipcode'] . '%'));
         }
+		switch ($data['notice_sanbox']) {
+			case '1': $sendLive = 0; $sendTest = 1; $collectionDevice->addFieldToFilter('is_demo',1); break;
+			case '2': $sendLive = 1; $sendTest = 0; $collectionDevice->addFieldToFilter('is_demo',0); break;
+			default: $sendLive = 1; $sendTest = 1; 
+		}
 		
-		$data['collection_device'] = $collectionDevice->getData();     
-		
-		$collectionDevice->addFieldToFilter('is_demo','0');
-		if ((int) $data['device_id'] != 0) {
-            $collectionDevice->addFieldToFilter('website_id', array('eq' => $website));
+        if ((int) $data['device_id'] != 0) {
             if ((int) $data['device_id'] == 2) {
                 //send android
                 $collectionDevice->addFieldToFilter('plaform_id', array('eq' => 3));
-                return $this->sendAndroid($collectionDevice, $data);
+				$result = $this->sendAndroid($collectionDevice, $data);
+				$data['collection_device'] = $collectionDevice->getData(); 
+				return $result;                
             } else {
                 //send IOS
                 $collectionDevice->addFieldToFilter('plaform_id', array('neq' => 3));
-                return $this->sendIOS($collectionDevice, $data);
+				$result = $this->sendIOS($collectionDevice, $data);
+				$data['collection_device'] = $collectionDevice->getData(); 
+				return $result;                
             }
         } else {
-            //send all			
-            $collectionDevice->addFieldToFilter('plaform_id', array('neq' => 3));
-            $resultIOS = $this->sendIOS($collectionDevice, $data);
+            //send all
+            $collection = $collectionDevice->addFieldToFilter('is_demo', '0');                       
+            $collectionAndroid = $collectionDevice2->addFieldToFilter('is_demo', '0');     
+
+            $collection->addFieldToFilter('plaform_id', array('neq' => 3));        
+            $collectionAndroid->addFieldToFilter('plaform_id', array('eq' => 3));
+          
+            $resultIOS = $this->sendIOS($collection, $data);
 			
-			$collectionDevice2->addFieldToFilter('plaform_id', array('eq' => 3));
-            $resultAndroid = $this->sendAndroid($collectionDevice2, $data);
-			
+            $resultAndroid = $this->sendAndroid($collectionAndroid, $data);			
+			$data['collection_device'] = $collectionDevice->getData(); 
             if ($resultIOS || $resultAndroid)
                 return true;
             else
@@ -154,13 +166,15 @@ class Simi_Siminotification_Helper_Data extends Mage_Core_Helper_Abstract
         }
     }
 
+
     public function sendIOS($collectionDevice, $data) {
+		
         $ch = Mage::helper('connector')->getDirPEMfile();
         $dir = Mage::helper('connector')->getDirPEMPassfile();
         $message = $data['notice_content'];
         $body['aps'] = array(
             'alert' => $data['notice_title'],
-            'sound' => 'default',
+            'sound' => 'default', 
             'badge' => 1,
             'title' => $data['notice_title'],
             'message' => $message,
@@ -171,18 +185,23 @@ class Simi_Siminotification_Helper_Data extends Mage_Core_Helper_Abstract
             'categoryName' => $data['category_name'],
             'has_child'  => $data['has_child'],
             'imageUrl'   => $data['image_url'],
+            'height'     => $data['height'],
+            'width'     => $data['width'],
             'show_popup'   => $data['show_popup'],
         );
         $payload = json_encode($body);
         $totalDevice = 0;
-		$ctx = stream_context_create();
-		stream_context_set_option($ctx, 'ssl', 'local_cert', $ch);
-		$fp = stream_socket_client('ssl://gateway.push.apple.com:2195', $err, $errstr, 60, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $ctx);
-		if (!$fp) {
-		 Mage::getSingleton('adminhtml/session')->addError("Failed to connect:" . $err . $errstr . PHP_EOL . "(IOS)");
-			return;
-		}
-		foreach ($collectionDevice as $item) {			
+		
+		if ($data['notice_sanbox'] == '0') { //send the old way
+			foreach ($collectionDevice as $item) {
+			$ctx = stream_context_create();
+			stream_context_set_option($ctx, 'ssl', 'local_cert', $ch);
+			//$fp = stream_socket_client('ssl://gateway.sandbox.push.apple.com:2195', $err, $errstr, 60, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $ctx);
+			$fp = stream_socket_client('ssl://gateway.push.apple.com:2195', $err, $errstr, 60, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $ctx);
+			if (!$fp) {
+			 Mage::getSingleton('adminhtml/session')->addError("Failed to connect:" . $err . $errstr . PHP_EOL . "(IOS)");
+				return;
+			}		
 			$deviceToken = $item->getDeviceToken();
 			$msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
 			// Send it to the server
@@ -191,12 +210,54 @@ class Simi_Siminotification_Helper_Data extends Mage_Core_Helper_Abstract
 				Mage::getSingleton('adminhtml/session')->addError('Message not delivered (IOS)' . PHP_EOL);
 				return false;
 			}
-			$totalDevice++;
+			$totalDevice++;					
+			fclose($fp);
+			}	
+		}
+		else {
+			$i = 0;		
+			$tokenArray = array();			
+			foreach ($collectionDevice as $item) {
+				if ($i == 100) {
+					$this->repeatSendiOS($tokenArray, $payload, $ch, $dir);					
+					$i =0;
+					$tokenArray = array();					
+				}
+				if (strlen ($item->getDeviceToken())<70) {
+					$tokenArray[] = $item->getDeviceToken();	
+				}					
+				else 
+					continue;
+				$i++;
+				$totalDevice++;
+			}
+			if ($i<100)
+				$this->repeatSendiOS($tokenArray, $payload, $ch, $dir);
+		}
+		Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Message successfully delivered to %s devices (IOS)', $totalDevice));
+		return true;
+			
+    }
+	
+	public function repeatSendiOS($tokenArray, $payload, $ch, $dir){	
+		$ctx = stream_context_create();
+		stream_context_set_option($ctx, 'ssl', 'local_cert', $ch);
+		$fp = stream_socket_client('ssl://gateway.push.apple.com:2195', $err, $errstr, 60, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $ctx);
+		if (!$fp) {
+		 Mage::getSingleton('adminhtml/session')->addError("Failed to connect:" . $err . $errstr . PHP_EOL . "(IOS)");
+			return;
+		}		
+		foreach ($tokenArray as $deviceToken) {
+			$msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
+			// Send it to the server
+			$result = fwrite($fp, $msg, strlen($msg));
+			if (!$result) {
+				Mage::getSingleton('adminhtml/session')->addError('Message not delivered (IOS)' . PHP_EOL);
+				return false;
+			}
 		}			
 		fclose($fp);
-        Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Message successfully delivered to %s devices (IOS)', $totalDevice));
-        return true;
-    }
+	}
 
     public function sendAndroid($collectionDevice, $data) {
         //$api_key = Mage::getStoreConfig('connector/android_key');
