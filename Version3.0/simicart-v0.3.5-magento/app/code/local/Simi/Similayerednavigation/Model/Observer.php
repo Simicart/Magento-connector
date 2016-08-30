@@ -261,6 +261,11 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
             Mage::getModel('connector/brand_customize')->setProductByBrand($brand, $collection);
         }
 
+		$producIdArray = array();
+        foreach ($collection as $$product) {
+            $producIdArray[] = $$product->getData('entity_id');
+        }
+		
         $productList = array();
         $collection->setPageSize($offset + $limit);
         $product_total = $collection->getSize();
@@ -358,15 +363,9 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
             $information['data'] = $productList;
         }
 
-        $producIdArray = array();
         $information['other'][0] = array(
             'product_id_array' => array()
         );
-
-        foreach ($productList as $_product) {
-            $producIdArray[] = $_product['product_id'];
-        }
-
         $information['other'] = $producIdArray;
 
         return $information;

@@ -28,8 +28,11 @@ class Simi_Siminotification_Model_Observer
      */
     public function sendNotificationProductChangePrice($observer){
         $helper = Mage::helper('siminotification');
+		$newProduct = $observer->getProduct();
+		if(!$newProduct->getId()){
+            Mage::getSingleton('core/session')->setData('new_added_product_sku', $newProduct->getSku());
+        }
         if($helper->getConfig('noti_price_enable')){
-            $newProduct = $observer->getProduct();
             $newPrice = $newProduct->getData('price');
             $newSpecialPrice = $newProduct->getData('special_price');
             $oldProduct = Mage::getModel('catalog/product')->load($newProduct->getId());
@@ -94,11 +97,7 @@ class Simi_Siminotification_Model_Observer
             $lastProductId = Mage::getModel('catalog/product')->getCollection()
                                 ->setOrder('entity_id','desc')->getFirstItem()->getId();
             if($newProduct->getId() && $newProduct->getId() == $lastProductId 
-                && $newProduct->getStatus() == '1' && $newProduct->getVisibility() != '1'
                 && $newProduct->getSku() == Mage::getSingleton('core/session')->getData('new_added_product_sku')){
-                $content = Mage::helper('siminotification')->__(
-                                        $helper->getConfig('new_product_message'), 
-                                        $newProduct->getName());
                 $data = array();
                 $data['website_id'] = $helper->getConfig('new_product_website');
                 $data['show_popup'] = $helper->getConfig('new_product_showpopup');
