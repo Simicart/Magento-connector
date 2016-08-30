@@ -50,6 +50,9 @@ class Simi_Connector_Model_Device extends Simi_Connector_Model_Abstract {
 			$this->setData('zipcode', $addresses['zipcode']);
 		}		
         $this->setData('device_token', $data->device_token);
+		//android force
+		if (strlen($data->device_token)>70)
+			$device_id = 3;
         $this->setData('plaform_id', $device_id);
         $this->setData('website_id', $website);   
         $this->setData('latitude', $data->latitude);
