@@ -262,8 +262,8 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
         }
 
 		$producIdArray = array();
-        foreach ($collection as $$product) {
-            $producIdArray[] = $$product->getData('entity_id');
+        foreach ($collection as $product) {
+            $producIdArray[] = $product->getData('entity_id');
         }
 		
         $productList = array();
@@ -364,9 +364,8 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
         }
 
         $information['other'][0] = array(
-            'product_id_array' => array()
+            'product_id_array' => $producIdArray;
         );
-        $information['other'] = $producIdArray;
 
         return $information;
     }
