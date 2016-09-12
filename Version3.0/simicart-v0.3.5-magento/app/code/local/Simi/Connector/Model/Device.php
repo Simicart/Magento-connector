@@ -158,16 +158,16 @@ class Simi_Connector_Model_Device extends Simi_Connector_Model_Abstract {
                     $address .= ', '.$addressComponents->long_name;
                 }
                 if(in_array('postal_town', $types) || in_array('administrative_area_level_1', $types)){
-                    $city .= $addressComponents->long_name;
+                    $city = $addressComponents->long_name;
                 }
                 if(in_array('administrative_area_level_2', $types)){
-                    $state .= $addressComponents->long_name;
+                    $state = $addressComponents->long_name;
                 }
                 if(in_array('country', $types)){
-                    $country .= $addressComponents->short_name;
+                    $country = $addressComponents->short_name;
                 }
                 if(in_array('postal_code', $types)){
-                    $zipcode .= $addressComponents->long_name;
+                    $zipcode = $addressComponents->long_name;
                 }
             }
             $addresses['address'] = $address;
