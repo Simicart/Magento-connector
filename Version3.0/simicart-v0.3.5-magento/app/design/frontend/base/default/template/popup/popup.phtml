@@ -1,42 +1,62 @@
-<?php $url = Mage::getStoreConfig("popup/general/link_alert");?>
 <?php $message = Mage::getStoreConfig("popup/general/content_alert"); ?>
 <?php $typeShow = Mage::getStoreConfig("popup/general/show_type"); ?>
-<?php if(Mage::getStoreConfig("popup/general/enable") == 1 && $url != '' && $message != ''):?>
-<?php if ($typeShow == 2):?>
-<div id="simi-popup">	
-		<div id="simi-box">
-		<div id="simi-message">
-			<span><?php echo $message;?></span>
-			<span><a href="<?php echo $url ?>"><?php  echo $this->__('Download here');?></a></span>
-		</div>	
-		<div id="simi-close" onclick="hidePop()">X</div>	
-		</div>
-</div>
+<?php if (Mage::getStoreConfig("popup/general/enable") == 1 && $message != ''): ?>
+    <script type="text/javascript">
+        function getCookie(c_name) {
+            if (document.cookie.length > 0) {
+                c_start = document.cookie.indexOf(c_name + "=");
+                if (c_start != -1) {
+                    c_start = c_start + c_name.length + 1;
+                    c_end = document.cookie.indexOf(";", c_start);
+                    if (c_end == -1) {
+                        c_end = document.cookie.length;
+                    }
+                    return unescape(document.cookie.substring(c_start, c_end));
+                }
+            }
+            return "";
+        }
 
-<style type="text/css">	
-	@media screen and (min-width: 0px) and (max-width: 479px) {
-		#simi-popup{width:100%;}
-	}
-</style>
-<script>	
-	function hidePop(){
-		$('simi-popup').hide();
-	}
-	window.onresize=function(){		
-		$('simi-popup').setStyle({width: "100%", });
-	}
-</script>
-<?php else: ?>
-<script type="text/javascript">
-    document.observe("dom:loaded", function() {
-        // initially hide all containers for tab content
-        var r=confirm("<?php echo $message;?>");
-        if (r==true)
-        {
-            setLocation('<?php echo $url; ?>');
-        }       
-    });            
+        document.observe("dom:loaded", function() {
+            var isMobile = false;
+            var url = '';
+            if (navigator.userAgent.match(/Android/i)) {
+                isMobile = true;
+                url = '<?php echo Mage::getStoreConfig("popup/general/link_android"); ?>';
+            }
+            if (navigator.userAgent.match(/iPhone/i)) {
+                isMobile = true;
+                url = '<?php echo Mage::getStoreConfig("popup/general/link_ipad"); ?>';
+            }
+            if (navigator.userAgent.match(/iPad/i)) {
+                isMobile = true;
+                url = '<?php echo Mage::getStoreConfig("popup/general/link_alert"); ?>';
+            }
+            // initially hide all containers for tab content
+            if (getCookie('SessionSimiPopup') != '1')
+                if (isMobile) {
+                    var r = confirm("<?php echo $message; ?>");
+                    if (r == true)
+                    {
+                        var name = 'SessionSimiPopup';
+                        var value = '1';
+                        var days = 1;
+                        var createCookie = function(name, value, days) {
+                            var expires;
+                            if (days) {
+                                var date = new Date();
+                                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                                expires = "; expires=" + date.toGMTString();
+                            }
+                            else {
+                                expires = "";
+                            }
+                            document.cookie = name + "=" + value + expires + "; path=/";
+                        }
+                        setLocation(url);
+                    }
+                }
+        });
 
-</script>
-<?php endif; ?>
+    </script>
 <?php endif; ?>
