@@ -363,9 +363,7 @@ class Simi_Similayerednavigation_Model_Observer extends Simi_Connector_Model_Cat
             $information['data'] = $productList;
         }
 
-        $information['other'][0] = array(
-            'product_id_array' => $producIdArray,
-        );
+        $information['other'] = $producIdArray;
 
         return $information;
     }
