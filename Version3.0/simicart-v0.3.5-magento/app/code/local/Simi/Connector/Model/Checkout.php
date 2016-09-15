@@ -110,7 +110,7 @@ class Simi_Connector_Model_Checkout extends Simi_Connector_Model_Abstract {
             $customer->loadByEmail($customer_email);
             if($customer->getId())
             {
-                $information = $this->statusError(Mage::helper('connector')->__('There is already a customer registered using this email address. Please login using this email address or enter a different email address to register your account.'));
+                $information = $this->statusError(array(Mage::helper('connector')->__('There is already a customer registered using this email address. Please login using this email address or enter a different email address to register your account.')));
                 return $information;
             } 
         }
