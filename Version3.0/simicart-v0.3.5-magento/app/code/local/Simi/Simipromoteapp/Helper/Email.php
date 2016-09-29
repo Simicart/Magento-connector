@@ -13,7 +13,7 @@ class Simi_Simipromoteapp_Helper_Email extends Mage_Core_Helper_Abstract
     const XML_EMAIL_REGISTER_TEMPLATE = 'email/email_for_register_template';
     const XML_EMAIL_SUBSCRIBER_TEMPLATE = 'email/email_for_subscriber_template';
     const XML_EMAIL_PURCHASING_TEMPLATE = 'email/email_for_purchasing_template';
-    const XML_EMAIL_ENABLE = 'email/email_template';
+    const XML_EMAIL_ENABLE = 'email/enable';
     const XML_IOS_LINK = 'app/ios_link';
     const XML_ANDROID_LINK = 'app/android_link';
     const XML_IMAGE_FIRST_BLOCK = 'cms/section_image_first_block';
@@ -75,7 +75,7 @@ class Simi_Simipromoteapp_Helper_Email extends Mage_Core_Helper_Abstract
         $android_link = $this->getAndroidLink();
         $email_sender = $this->getSenderEmail();
 
-        if($templateId == null || ($iOs_link == null && $android_link == null) || $email_sender == null || !filter_var($email_sender, FILTER_VALIDATE_EMAIL) === false){
+        if($templateId == null || ($iOs_link == null && $android_link == null) || $email_sender == null || filter_var($email_sender, FILTER_VALIDATE_EMAIL) === false){
             // can not send email
 
         } else {
