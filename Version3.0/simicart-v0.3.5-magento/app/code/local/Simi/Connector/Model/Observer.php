@@ -32,36 +32,54 @@ class Simi_Connector_Model_Observer {
         }
     }
 
-    public function addCondition($observer) {
+	public function addCondition($observer) {        
         $object = $observer->getObject();
         $data = $object->getCacheData();
-        $agreements = Mage::helper('connector/checkout')->getAgreements();
-
-        $condition = array();
-        $helper = Mage::helper('cms');
-        $processor = $helper->getBlockTemplateProcessor();        
-        foreach ($agreements as $agreement) {
-            if ($agreement->getIsHtml()) {
-                $condition[] = array(
-                    'id' => $agreement->getId(),
-                    'name' => $agreement->getName(),
-                    'title' => $agreement->getCheckboxText(),
-                    'content' =>  $processor->filter($agreement->getContent()),
-                );
-            } else {
-                $condition[] = array(
-                    'id' => $agreement->getId(),
-                    'name' => $agreement->getName(),
-                    'title' => $agreement->getCheckboxText(),
-                    'content' => nl2br(Mage::helper('connector')->escapeHtml($agreement->getContent())),
-                );
+          if (Mage::getStoreConfig('hideaddress/general/enable') == 0) { 
+            $agreements = Mage::helper('connector/checkout')->getAgreements();
+            $conditions = array();
+			$helper = Mage::helper('cms');
+			$processor = $helper->getBlockTemplateProcessor();       
+            foreach ($agreements as $agreement) {
+                if ($agreement->getIsHtml()) {
+                    $conditions[] = array(
+                        'id' => $agreement->getId(),
+                        'name' => $agreement->getName(),
+                        'title' => $agreement->getCheckboxText(),
+                        'content' => $processor->filter($agreement->getContent()),
+                    );
+                } else {
+                    $conditions[] = array(
+                        'id' => $agreement->getId(),
+                        'name' => $agreement->getName(),
+                        'title' => $agreement->getCheckboxText(),
+                        'content' => nl2br(Mage::helper('connector')->escapeHtml($agreement->getContent())),
+                    );
+                }
             }
+            $data['condition'] = $conditions;
+            $object->setCacheData($data, "simi_connector");
+          } else if (Mage::getStoreConfig('hideaddress/general/enable') == 1) { 
+            $show = Mage::getStoreConfig('hideaddress/terms_conditions/enable_terms');
+            $conditions = array();
+            if ($show) {
+                $term_title = Mage::getStoreConfig('hideaddress/terms_conditions/term_title');
+                $term_html = Mage::getStoreConfig('hideaddress/terms_conditions/term_html');
+                $condition=array();
+                $condition['id']=-1;
+                $condition['name']="Terms and conditions";
+                $condition['title'] = $term_title;
+                $condition['content'] = $term_html;
+                $conditions[]=$condition;
+            }    
+            $data['condition'] = $conditions;
+            $object->setCacheData($data, "simi_connector");
         }
-        $data['condition'] = $condition;
-        $object->setCacheData($data, "simi_connector");
+           
         return;
     }
-
+	
+	
     public function editProfile($observer) {
         $object = $observer->getObject();
         $data = $object->getCacheData();
