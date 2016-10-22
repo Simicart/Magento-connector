@@ -21,7 +21,7 @@
  */
 abstract class Simi_Connector_Controller_Action extends Mage_Core_Controller_Front_Action {
 
-    //check app_key
+    //check app_key   
     protected $_data;
 
     public function preDispatch() {
