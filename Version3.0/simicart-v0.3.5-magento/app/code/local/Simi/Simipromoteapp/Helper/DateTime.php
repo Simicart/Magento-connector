@@ -18,7 +18,7 @@ class Simi_Simipromoteapp_Helper_DateTime extends Mage_Core_Helper_Abstract
                 'label' => Mage::helper('bundle')->__('Date'),
                 'tabindex' => 1,
 				'image' => Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_SKIN).'adminhtml/default/default/images/grid-cal.gif',
-                'format' => Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_LONG),
+                'format' => Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT),
                 'value' => $default_value ==  null ? date('Y-m-d') : date('Y-m-d',strtotime($default_value)),
 				'class' => 'required-entry'
             )

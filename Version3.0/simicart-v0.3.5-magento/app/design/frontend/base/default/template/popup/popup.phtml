@@ -1,3 +1,4 @@
+<!-- Max test git-->
 <?php $message = Mage::getStoreConfig("popup/general/content_alert"); ?>
 <?php $typeShow = Mage::getStoreConfig("popup/general/show_type"); ?>
 <?php if (Mage::getStoreConfig("popup/general/enable") == 1 && $message != ''): ?>
@@ -32,29 +33,18 @@
                 isMobile = true;
                 url = '<?php echo Mage::getStoreConfig("popup/general/link_alert"); ?>';
             }
+
             // initially hide all containers for tab content
             if (getCookie('SessionSimiPopup') != '1')
                 if (isMobile) {
                     var r = confirm("<?php echo $message; ?>");
                     if (r == true)
                     {
-                        var name = 'SessionSimiPopup';
-                        var value = '1';
-                        var days = 1;
-                        var createCookie = function(name, value, days) {
-                            var expires;
-                            if (days) {
-                                var date = new Date();
-                                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                                expires = "; expires=" + date.toGMTString();
-                            }
-                            else {
-                                expires = "";
-                            }
-                            document.cookie = name + "=" + value + expires + "; path=/";
-                        }
                         setLocation(url);
                     }
+					var name = 'SessionSimiPopup';
+					var value = '1';
+					document.cookie = name + "=" + value;
                 }
         });
 

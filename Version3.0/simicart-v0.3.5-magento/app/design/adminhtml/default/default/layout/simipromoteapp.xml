@@ -31,18 +31,4 @@
 		</reference>
 	</adminhtml_appreport_appreport_index>
 
-	<adminhtml_appreport_appreport_index>
-		<reference name="head">
-			<action method="addJs"><script>simi/jquery-1.11.1.min.js</script></action>
-			<action method="addJs"><script>simi/jquery-ui.min.js</script></action>
-			<action method="addJs"><script>simi/highcharts.js</script></action>
-			<action method="addJs"><script>simi/exporting.js</script></action>
-			<action method="addCss">
-				<stylesheet>report.css</stylesheet>
-			</action>
-		</reference>
-		<reference name="content">
-			<block type="simipromoteapp/adminhtml_promoteapp" name="simipromoteapp" before="-"/>
-		</reference>
-	</adminhtml_appreport_appreport_index>
 </layout>
